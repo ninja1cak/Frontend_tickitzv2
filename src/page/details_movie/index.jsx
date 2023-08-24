@@ -1,11 +1,9 @@
 import React from 'react'
-import Header from '../component/header'
-import Footer from '../component/footer'
-import Poster from '../assets/spiderman logo.svg'
-import Preview from '../assets/ticketsprev.svg'
-import Ebv from '../assets/Vector.png'
+import Header from '../../component/header'
+import Footer from '../../component/footer'
+import Poster from '../../assets/spiderman logo.svg'
 
-function page() {
+function details_movie() {
   return (
     <>
         <Header />
@@ -138,4 +136,4 @@ function page() {
   )
 }
 
-export default page
+export default details_movie

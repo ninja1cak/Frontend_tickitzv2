@@ -76,8 +76,8 @@ function Header() {
         ) : (
         <div>
         <div className="hidden md:flex md:gap-x-6 items-center justify-between">
-          <Link className="border hover:border-4 hover:border-gray-100 border-primary h-14 w-32 hover:font-black bg-white text-primary mx-auto items-center flex justify-center rounded-lg hover:bg-primary hover:text-white" to="/">Sign In</Link>
-          <Link className="border h-14 w-32 hover:border-4 border-gray-100 hover:font-black bg-primary mx-auto items-center flex justify-center text-white rounded-lg hover:bg-white hover:text-primary" to="/">Sign Up</Link>
+          <Link className="border hover:border-4 hover:border-gray-100 border-primary h-14 w-32 hover:font-black bg-white text-primary mx-auto items-center flex justify-center rounded-lg hover:bg-primary hover:text-white" to="/login">Sign In</Link>
+          <Link className="border h-14 w-32 hover:border-4 border-gray-100 hover:font-black bg-primary mx-auto items-center flex justify-center text-white rounded-lg hover:bg-white hover:text-primary" to="/signup">Sign Up</Link>
         </div>
         </div>
 
