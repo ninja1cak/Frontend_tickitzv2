@@ -11,7 +11,7 @@ function router() {
         <Routes>
             <Route path="/" element={<Page/>}/>
             <Route path="/login" element={<Login/>}/>
-            <Route path="/signup" element={<SignUp/>}/>
+            <Route path="/register" element={<SignUp/>}/>
         </Routes>
     </BrowserRouter>
   )
