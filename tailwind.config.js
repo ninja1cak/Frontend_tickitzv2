@@ -4,7 +4,7 @@ module.exports = {
   theme: {
     extend: {
         colors: {
-            primary: '#5F2EEA',
+            primary: '#1D4ED8',
         },
         fontFamily: {
             mulish:['Mulish']
@@ -37,6 +37,9 @@ module.exports = {
     prefix: "", // prefix for daisyUI classnames (components, modifiers and responsive class names. Not colors)
     logs: true, // Shows info about daisyUI version and used config in the console when building your CSS
 },
+variants: {
+    fill: ['hover', 'focus'], 
+  },
 }
 
 

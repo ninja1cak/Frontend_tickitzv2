@@ -1,4 +1,5 @@
 import React from 'react'
+import logo from '../assets/Vector.svg'
 import fb from '../assets/eva_facebook-outline.jpg'
 import yt from '../assets/feather_youtube.jpg'
 import tw from '../assets/eva_twitter-outline.jpg'
@@ -12,8 +13,8 @@ function footer() {
     <>
   <footer className="mx-auto flex flex-col md:flex-row max-w-7xl justify-between px-10 py-20 gap-y-16 md:gap-x-2">
     <div>
-      <img className="h-20 w-auto" src="/assets/Tickitz 1.jpg" alt="logo" />
-      <p className="font-medium text-gray-700 leading-8 tracking-wider">
+      <img className="h-9 w-auto" src={logo} alt="logo" />
+      <p className="font-medium text-gray-700 pt-5 leading-8 tracking-wider">
         Stop waiting in line. Buy tickets <br />
         conveniently, watch movies quietly.
       </p>

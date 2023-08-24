@@ -1,5 +1,5 @@
 import React from 'react'
-import logo from '../assets/Tickitz 1.jpg'
+import logo from '../assets/Vector.svg'
 import mglass from '../assets/bx_bx-search.jpg'
 import avatar from '../assets/Ellipse 11.svg'
 import burger from '../assets/gg_menu-right-alt.svg'
@@ -19,23 +19,25 @@ function Header() {
     <div className="md:flex md:gap-x-12 items-center justify-between">
       <Link href="#">
         <img
-          className="h-9 md:h-14 md:w-auto"
+          className="h-9 md:h-9 md:w-auto"
           to="/home"
           src={logo}
           alt="logo"
         />
       </Link>
-      { data[0] && data[0].roles === 'admin' ? (
+    </div>
+    <div className='flex gap-x-12'> 
+    { data[0] && data[0].roles === 'admin' ? (
             <>
-                <Link className="hidden lg:flex text-base font-sans " to="/home">Dashboard</Link>
-                <Link className="hidden lg:flex pl-7  text-base font-sans " to="/movie">List Movie</Link>
-                <Link className="hidden lg:flex pl-7 text-base font-sans " to="/manage">Manage Movie</Link>
+                <Link className="hidden text-base font-sans " to="/home">Dashboard</Link>
+                <Link className="hidden text-base font-sans " to="/movie">List Movie</Link>
+                <Link className="hidden text-base font-sans " to="/manage">Manage Movie</Link>
             </>
         ) : (
             <>
-                <Link className="hidden lg:flex  text-base font-sans " to="/home">Dashboard</Link>
-                <Link className="hidden lg:flex pl-7  text-base font-sans " to="/movie">List
-                    Movie</Link>
+                <Link className="hidden lg:flex text-base hover:font-bold font-sans " to="/home">Home</Link>
+                <Link className="hidden lg:flex text-base hover:font-bold pl-7 font-sans " to="/movie">Movies</Link>
+                <Link className="hidden lg:flex text-base hover:font-bold pl-7 font-sans " to="/payment">Buy ticket</Link>
             </>
         )}
     </div>
@@ -73,8 +75,9 @@ function Header() {
         </div>
         ) : (
         <div>
-        <div className="hidden md:flex md:gap-x-12 items-center justify-between">
-          <Link className="h-10 w-32 bg-primary mx-auto items-center flex justify-center text-white rounded-lg" to="/">Sign Up</Link>
+        <div className="hidden md:flex md:gap-x-6 items-center justify-between">
+          <Link className="border hover:border-4 hover:border-gray-100 border-primary h-14 w-32 hover:font-black bg-white text-primary mx-auto items-center flex justify-center rounded-lg hover:bg-primary hover:text-white" to="/">Sign In</Link>
+          <Link className="border h-14 w-32 hover:border-4 border-gray-100 hover:font-black bg-primary mx-auto items-center flex justify-center text-white rounded-lg hover:bg-white hover:text-primary" to="/">Sign Up</Link>
         </div>
         </div>
 
