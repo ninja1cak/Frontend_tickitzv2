@@ -2,6 +2,7 @@ import React from 'react'
 import Header from '../../component/header'
 import Footer from '../../component/footer'
 import Poster from '../../assets/spiderman logo.svg'
+import { Link } from 'react-router-dom'
 
 function details_movie() {
   return (
@@ -12,7 +13,7 @@ function details_movie() {
             <section className='mt-96'>
                 <div className='flex object-bottom gap-x-12'>
                 <img src={Poster} alt="spiderman-logo" className='z-10 h-auto w-56' />
-                <div className='relative bottom-0 mt-32'>
+                <div className='relative top-40'>
                     <h1 className='font-bold text-lg m-2'>SPIDERMAN: HOMECOMING</h1>
                     <div className='flex gap-x-2'>
                         <h2 className='w-32 text-base bg-gray-100 border text-center rounded-full'>Action</h2>
@@ -126,7 +127,7 @@ function details_movie() {
                         >4</button>
                     </div>
                 </div>
-                <button className="h-16 object-bottom w-44 bg-primary mx-auto items-center flex justify-center text-white rounded-lg hover:bg-white hover:text-primary border" to="/">BOOK NOW</button>
+                <Link to='/order_page' className="h-16 object-bottom w-44 bg-primary mx-auto items-center flex justify-center text-white rounded-lg hover:bg-white hover:text-primary border">BOOK NOW</Link>
             </section>
 
         </div>
