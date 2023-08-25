@@ -6,6 +6,7 @@ import SignUp from "./page/signup/index";
 import Order_page from "./page/Order_page/index"
 import Payment_page from "./page/payment_page/index"
 import Check_payment from "./page/check_payment";
+import Home from "./page/page/index";
 
 
 function router() {
@@ -13,6 +14,7 @@ function router() {
     <BrowserRouter>
         <Routes>
             <Route path="/" element={<Page/>}/>
+            <Route path="/home" element={<Home/>}/>
             <Route path="/login" element={<Login/>}/>
             <Route path="/register" element={<SignUp/>}/>
             <Route path="/order_page" element={<Order_page/>}/>
