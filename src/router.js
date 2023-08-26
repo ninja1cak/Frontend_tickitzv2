@@ -8,6 +8,10 @@ import Payment_page from "./page/payment_page/index"
 import Check_payment from "./page/check_payment";
 import Home from "./page/page/index";
 import Profile from "./page/profile/index";
+import Admin_Dashboard from "./page/admin/dashboard"
+import Admin_Movie from "./page/admin/movie"
+import Admin_Movie_create from "./page/admin/movie/createData"
+import Admin_Movie_update from "./page/admin/movie/updateData"
 
 
 function router() {
@@ -23,6 +27,10 @@ function router() {
             <Route path="/payment_info" element={<Payment_page/>}/>
             <Route path="/check_payment" element={<Check_payment/>}/>
             <Route path="/profile" element={<Profile/>}/>
+            <Route path="/admin" element={<Admin_Dashboard/>}/>
+            <Route path="/admin/movie" element={<Admin_Movie/>}/>
+            <Route path="/admin/movie/create" element={<Admin_Movie_create/>}/>
+            <Route path="/admin/movie/update/:id" element={<Admin_Movie_update/>}/>
         </Routes>
     </BrowserRouter>
   )
