@@ -16,58 +16,58 @@ import { login } from "../../store/reducer/user";
 
 function SignUp() {
 
-    // const {isAuth} = useSelector((s) => s.users)
-// const [form, setForm] = useState({})
-// const api = useApi()
-// const dispatch = useDispatch()
-// const navigate = useNavigate()
-// const [btnState, setBtnState] = useState(true)
-// const [status, setStatus] = useState(0)
+const {isAuth} = useSelector((s) => s.users)
+const [form, setForm] = useState({})
+const api = useApi()
+const dispatch = useDispatch()
+const navigate = useNavigate()
+const [btnState, setBtnState] = useState(true)
+const [status, setStatus] = useState(0)
 const [toggle, setToggle] = useState(false)
+const [checkbox, setCheckBox] = useState()
+const inputChange = (e) =>{
+    const data = {...form}
+    data[e.target.name] = e.target.value
+    setForm(data)
+}
 
-// const inputChange = (e) =>{
-//     const data = {...form}
-//     data[e.target.name] = e.target.value
-//     setForm(data)
-// }
+const handleCheckbox = (e) =>{
+    setCheckBox(e.target.checked)
+}
 
-// const goLogin = async () =>{
-//     try {
-//         console.log(form)
-//         const {data} = await api({
-//             method: 'POST',
-//             data: form,
-//             url:'/auth/'
-//         })
-//         setStatus(data.status)
-//         if(data.status == 201){
-//             const token = data.token
-//             dispatch(login(token))
-//             navigate('/home')
-//         }
-//         console.log(data)
-//     } catch (error) {
-//         console.log(error)
-//         return error
-//     }
-// }
+const goRegister = async () =>{
+    try {
+        console.log(form)
+        const {data} = await api({
+            method: 'POST',
+            data: form,
+            url:'/user/'
+        })
+        setStatus(data.status)
+        console.log(data)
+    } catch (error) {
+        console.log(error)
+        return error
+    }
+}
 
 const handleToggle = () => {
     setToggle(!toggle)
 }
-// useEffect(() =>{
-//     if(isAuth)(
-//         navigate('/home')
-//     )
-// },[])
+useEffect(() =>{
+    if(isAuth)(
+        navigate('/home')
+    )
+},[])
 
-// useEffect(() =>{
-//     if(!form.password || !form.email ){
-//         setBtnState(true)
-//     }else{
-//         setBtnState(false)
-//     }
-// },[form])
+useEffect(() =>{
+    console.log(form, checkbox)
+    if(!form.password_user || !form.email_user ){
+        setBtnState(true)
+    }else{
+        setBtnState(false)
+    }
+},[form, checkbox])
 
   return (
     <>
@@ -80,14 +80,24 @@ const handleToggle = () => {
                     <div className='flex flex-col px-10 md:px-24'>
                         <div className='hidden md:flex justify-center gap-5 mt-8'>
                             <div className='flex flex-col justify-center items-center'>
-                                <div className='h-10 w-10 flex justify-center items-center rounded-full bg-blue-600 text-white'>1</div>
-                                <span className='text-sm'>Fill Form</span>
+                                {
+                                    status === 200 ?
+                                    <div className='h-10 w-10 flex justify-center items-center rounded-full bg-slate-400 text-white'>1</div>
+                                    :
+                                    <div className='h-10 w-10 flex justify-center items-center rounded-full bg-blue-600 text-white'>1</div>
+                                }
+                                <span className='text-sm'>Fill Form</span>  
                             </div>
                             <div>
                                 <span className='text-xl'>- - - - -</span>
                             </div>
                             <div className='flex flex-col justify-center items-center'>
-                                <div className='h-10 w-10 flex justify-center items-center rounded-full bg-slate-400 text-white'>2</div>
+                                {
+                                    status === 200 ?
+                                    <div className='h-10 w-10 flex justify-center items-center rounded-full bg-blue-600 text-white'>2</div>
+                                    :
+                                    <div className='h-10 w-10 flex justify-center items-center rounded-full bg-slate-400 text-white'>2</div>
+                                }
                                 <span className='text-sm'>Activate</span>
                             </div>
                             <div>
@@ -98,14 +108,22 @@ const handleToggle = () => {
                                 <span className='text-sm'>Done</span>
                             </div>
                         </div>
+                        {
+                            status === 200 ?
+                            <div>
+                                <span className=' text-lg font-medium mt-8'>Activate Your Account</span>
+                                <p>Check your email for activate your account</p>
+                            </div>
+                            :
+                        <>
                         <div className='flex flex-col mb-4 mt-8'>
                             <span className='text-lg font-medium mb-3'>Email</span>
-                            <input className='rounded-md border-2 border-slate-300 bg-gray-100 placeholder:text-slate-400 placeholder:px-4' type="text" placeholder='Enter your email' required />
+                            <input className='rounded-md border-2 border-slate-300 bg-gray-100 placeholder:text-slate-400 placeholder:px-4' type="text" placeholder='Enter your email' required name="email_user" onChange={inputChange}/>
                         </div>
                         <div className='flex flex-col mb-4'>
                             <span className='text-lg font-medium mb-3'>Password</span>
                             <div className='relative w-full'>
-                                <input className='w-full rounded-md border-2 border-slate-300 bg-gray-100 placeholder:text-slate-400 placeholder:px-4' type={toggle == false ? "password" : "text"} placeholder='Enter your password' required/>
+                                <input className='w-full rounded-md border-2 border-slate-300 bg-gray-100 placeholder:text-slate-400 placeholder:px-4' type={toggle == false ? "password" : "text"} placeholder='Enter your password' required name='password_user' onChange={inputChange}/>
                                 {
                                     (toggle == false) ? <img className='cursor-pointer absolute top-3 right-4 w-6 text-slate-500' src={eyeClosed} alt="eye-closed" onClick={handleToggle}/>
                                     : <img className='cursor-pointer absolute top-3 right-4 w-5 text-slate-500' src={eyeOpen} alt="eye-closed" onClick={handleToggle}/>
@@ -117,11 +135,11 @@ const handleToggle = () => {
                             <Link className='ms-2 text-blue-500 font-medium underline underline-offset-4' to="/Login">Log in</Link>
                         </div>
                         <div className='hidden md:flex items-center gap-3 mb-10 md:mb-6'>
-                            <input type="checkbox" required/>
+                            <input type="checkbox" required onClick={handleCheckbox} name='checkbox'/>
                             <span>I agree to terms & conditions</span>
                         </div>
                         <div className='w-full mb-4'>
-                            <button className='btn bg-blue-600 text-white w-full hover:text-blue-600 capitalize'>Login</button>
+                            <button className='btn bg-blue-600 text-white w-full hover:text-blue-600 capitalize' onClick={goRegister}>Register</button>
                         </div>
                         <div className='hidden md:block text-center mb-10 md:mb-2'>
                             <span className='text-slate-600 font-medium'>Already have an account?</span>
@@ -140,6 +158,10 @@ const handleToggle = () => {
                                 <span className='hidden md:block text-slate-500 capitalize'>Facebook</span>
                             </button>
                         </div>
+                        </>
+                        }
+
+
                     </div>
                 </div>
             </div>

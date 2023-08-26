@@ -44,7 +44,7 @@ const goLogin = async () =>{
         if(data.status == 200){
             const token = data.token
             dispatch(login(token))
-            navigate('/')
+            navigate('/home')
         }
     } catch (error) {
         console.log(error)
@@ -58,7 +58,7 @@ const handleToggle = () => {
 
 useEffect(() =>{
     if(isAuth)(
-        navigate('/')
+        navigate('/home')
     )
 },[])
 
