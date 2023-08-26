@@ -1,9 +1,7 @@
 import React, {useState, useEffect} from "react";
 import { Link } from "react-router-dom";
 import thumb from "../../../assets/movie-banner1.png"
-import { Datepicker, Input, initTE } from "tw-elements";
 import Header from "../../../component/header";
-initTE({ Datepicker, Input });
 import useApi from "../../../helper/useApi";
 
 function Admin_Movie() {
