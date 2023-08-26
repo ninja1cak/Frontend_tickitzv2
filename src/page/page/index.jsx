@@ -55,8 +55,6 @@ function Page() {
 
   const handleFilter = (e) =>{
     if(e.target.value !== '' && e.target.value !== 'All'){
-      console.log('if awal',e.target.value)
-
       setFilter(e.target.value)
     }else if(e.target.innerText === 'All' || e.target.value === 'All'){
       console.log(e.target.value)

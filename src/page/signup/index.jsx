@@ -17,12 +17,16 @@ import { login } from "../../store/reducer/user";
 function SignUp() {
 
 const {isAuth} = useSelector((s) => s.users)
-const [form, setForm] = useState({})
+const [form, setForm] = useState({
+    email_user : '',
+    password_user: ''
+})
 const api = useApi()
 const dispatch = useDispatch()
 const navigate = useNavigate()
 const [btnState, setBtnState] = useState(true)
 const [status, setStatus] = useState(0)
+const [error, setError] = useState('')
 const [toggle, setToggle] = useState(false)
 const [checkbox, setCheckBox] = useState()
 const params = useParams()
@@ -57,8 +61,9 @@ const goRegister = async () =>{
         setStatus(data.status)
         console.log(data)
     } catch (error) {
-        console.log(error)
-        return error
+        console.log(error.response.data)
+        setStatus(error.response.data.status)
+        setError(error.response.data.description)
     }
 }
 
@@ -76,12 +81,13 @@ useEffect(() =>{
 
 useEffect(() =>{
     console.log(form, checkbox)
-    if(!form.password_user || !form.email_user ){
+
+    if(!form.password_user || !form.email_user || form.password_user.length<=6 || !checkbox){
         setBtnState(true)
     }else{
         setBtnState(false)
     }
-},[form, checkbox, status])
+},[form, checkbox, status, error])
 
   return (
     <>
@@ -145,11 +151,19 @@ useEffect(() =>{
                             </div>
                             :
                         <>
-                        <div className='flex flex-col mb-4 mt-8'>
+                        <div className='relative flex flex-col mb-4 mt-8'>
                             <span className='text-lg font-medium mb-3'>Email</span>
                             <input className='rounded-md border-2 border-slate-300 bg-gray-100 placeholder:text-slate-400 placeholder:px-4' type="text" placeholder='Enter your email' required name="email_user" onChange={inputChange}/>
+                            {
+                                error === 'pq: duplicate key value violates unique constraint "email"' ?
+                                <span className='absolute bottom-[-25px] right-0 text-red-500 font-bold'>Email already registered</span>
+                                : status === 401 ? 
+                                <span className='absolute bottom-[-25px] right-0 text-red-500 font-bold'>Email not validate as email</span>
+                                :
+                                <></>
+                            }
                         </div>
-                        <div className='flex flex-col mb-4'>
+                        <div className='relative flex flex-col mb-5'>
                             <span className='text-lg font-medium mb-3'>Password</span>
                             <div className='relative w-full'>
                                 <input className='w-full rounded-md border-2 border-slate-300 bg-gray-100 placeholder:text-slate-400 placeholder:px-4' type={toggle == false ? "password" : "text"} placeholder='Enter your password' required name='password_user' onChange={inputChange}/>
@@ -158,6 +172,12 @@ useEffect(() =>{
                                     : <img className='cursor-pointer absolute top-3 right-4 w-5 text-slate-500' src={eyeOpen} alt="eye-closed" onClick={handleToggle}/>
                                 }
                             </div>
+                            {
+                                form.password_user.length < 6 && form.password_user !== '' ?
+                                <span className='absolute bottom-[-22px] right-0 text-red-500 font-bold'>Minimum password 6</span>
+                                : 
+                                <></>
+                            }
                         </div>
                         <div className='block md:hidden text-center mb-10 md:mb-4'>
                             <span className='text-slate-600 font-medium'>Already have an account?</span>
@@ -168,7 +188,7 @@ useEffect(() =>{
                             <span>I agree to terms & conditions</span>
                         </div>
                         <div className='w-full mb-4'>
-                            <button className='btn bg-blue-600 text-white w-full hover:text-blue-600 capitalize' onClick={goRegister}>Register</button>
+                            <button disabled={btnState} className='btn bg-blue-600 text-white w-full hover:text-blue-600 hover:font-black capitalize' onClick={goRegister}>Register</button>
                         </div>
                         <div className='hidden md:block text-center mb-10 md:mb-2'>
                             <span className='text-slate-600 font-medium'>Already have an account?</span>

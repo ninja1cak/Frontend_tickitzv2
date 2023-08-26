@@ -31,7 +31,7 @@ function Admin_Movie() {
         try {
           await api.delete(`/movie/${id_movie}`); // Assuming the endpoint for delete is /movie/:id
           // Update the movies list after successful deletion
-          setMovies(prevMovies => prevMovies.filter(movies => movies.id_movie !== id));
+          setMovies(prevMovies => prevMovies.filter(movies => movies.id_movie !== id_movie));
         } catch (error) {
           console.log(error);
         }

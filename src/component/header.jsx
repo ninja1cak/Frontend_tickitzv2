@@ -20,7 +20,7 @@ function Header() {
       <Link href="#">
         <img
           className="h-9 md:h-9 md:w-auto"
-          to="/home"
+          to="/"
           src={logo}
           alt="logo"
         />
@@ -29,15 +29,15 @@ function Header() {
     <div className='flex gap-x-12'> 
     { data[0] && data[0].roles === 'admin' ? (
             <>
-                <Link className="hidden text-base font-sans " to="/home">Dashboard</Link>
+                <Link className="hidden text-base font-sans " to="/">Dashboard</Link>
                 <Link className="hidden text-base font-sans " to="/movie">List Movie</Link>
                 <Link className="hidden text-base font-sans " to="/manage">Manage Movie</Link>
             </>
         ) : (
             <>
-                <Link className="hidden lg:flex text-base hover:font-bold font-sans " to="/home">Home</Link>
-                <Link className="hidden lg:flex text-base hover:font-bold pl-7 font-sans " to="/movie">Movies</Link>
-                <Link className="hidden lg:flex text-base hover:font-bold pl-7 font-sans " to="/payment">Buy ticket</Link>
+                <Link className="hidden lg:flex text-base hover:font-bold font-sans " to="/">Home</Link>
+                <Link className="hidden lg:flex text-base hover:font-bold pl-7 font-sans " to="/">Movies</Link>
+                <Link className="hidden lg:flex text-base hover:font-bold pl-7 font-sans " to="/">Buy ticket</Link>
             </>
         )}
     </div>
@@ -67,7 +67,7 @@ function Header() {
             </label>
             <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
               <li><Link to='/profile'>Profile</Link></li>
-              <li><Link to="/home" onClick={()=>{dispatch(logout())}}>Logout</Link></li>
+              <li><Link to="/" onClick={()=>{dispatch(logout())}}>Logout</Link></li>
             </ul>
           </div>
           </div>
@@ -89,8 +89,8 @@ function Header() {
                 <ul tabIndex={0} className="dropdown-content z-[1] menu items-center shadow bg-base-100 rounded-box w-52">
                     <li><Link to='/profile'>Profile</Link></li>
                     <li><Link to="/movie">List Movie</Link></li>
-                    <li><Link to="/home">Dashboard</Link></li>
-                    <li><Link to="/home" onClick={()=>{dispatch(logout())}}>Logout</Link></li>
+                    <li><Link to="/">Dashboard</Link></li>
+                    <li><Link to="/" onClick={()=>{dispatch(logout())}}>Logout</Link></li>
                 </ul>
             </div>
       ):(
