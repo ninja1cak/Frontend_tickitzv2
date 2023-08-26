@@ -1,10 +1,47 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import Header from '../../component/header'
 import Footer from '../../component/footer'
 import Poster from '../../assets/spiderman logo.svg'
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
+import useApi from '../../helper/useApi'
 
-function details_movie() {
+
+function Details_movie() {
+    const params = useParams()
+
+    const api = useApi()
+    
+    const [movie, setMovie] = useState([])
+
+
+    // const GetMovies = async () => {
+    //     try {
+    //         const {data} = await axios.get('http://localhost:8080/movie/')
+    //         setmovie(data.data)
+    //         console.log(data.data)
+    //     } catch (error) {
+    //         console.log(error)
+    //     }
+    // }
+
+    const getMovie = async () => {
+        try {
+          const {data} = await api(`/movie?id_movie=${params.id}`)
+          console.log(data.data)
+          setMovie(data.data)
+          
+        } catch (error) {
+          console.log(error)
+        }
+      }
+
+    console.log(params.id)  
+    console.log(movie)
+
+    useEffect(()=>{
+        getMovie()
+    }, [])
+
   return (
     <>
         <Header />
@@ -14,7 +51,7 @@ function details_movie() {
                 <div className='flex object-bottom gap-x-12'>
                 <img src={Poster} alt="spiderman-logo" className='z-10 h-auto w-56' />
                 <div className='relative top-40'>
-                    <h1 className='font-bold text-lg m-2'>SPIDERMAN: HOMECOMING</h1>
+                    <h1 className='font-bold text-lg m-2'>{movie[0].title_movie}</h1>
                     <div className='flex gap-x-2'>
                         <h2 className='w-32 text-base bg-gray-100 border text-center rounded-full'>Action</h2>
                         <h2 className='w-32 text-base bg-gray-100 border text-center rounded-full'>Adventure</h2>
@@ -23,22 +60,22 @@ function details_movie() {
                         <div>
                             <div className="">
                                 <p className="text-sm text-gray-600 my-2">Release date</p>
-                                <p className="caption">June 28, 2017</p>
+                                <p className="caption">{movie[0].release_date_movie}</p>
                             </div>
-                            <div className="details">
+                            <div className="movie">
                                 <p className="text-sm text-gray-600 my-2">Directed by</p>
-                                <p className="caption">Jon Watss</p>
+                                <p className="caption">{movie[0].director_movie}</p>
                             </div>
                         </div>
                         <div>
-                            <div className="details">
+                            <div className="movie">
                                 <p className="text-sm text-gray-600 my-2">Duration</p>
-                                <p className="caption">2 hours 13 minutes</p>
+                                <p className="caption">{movie[0].duration_movie}</p>
                             </div>
-                            <div className="details">
+                            <div className="movie">
                                 <p className="text-sm text-gray-600 my-2">Casts</p>
                                 <p className="caption">
-                                Tom Holland, Michael Keaton, Robert Downey Jr., ...
+                                {movie[0].casts_movie}
                                 </p>
                             </div>
                         </div>
@@ -48,11 +85,7 @@ function details_movie() {
                 <div>
                     <h2 className='mt-10 text-lg font-bold'>Synopsis</h2>
                     <p className='w-3/4 leading-loose'>
-                    Thrilled by his experience with the Avengers, Peter returns home, where he lives with his Aunt May, 
-                    under the watchful eye of his new mentor Tony Stark, Peter tries to fall back into his normal daily 
-                    routine - distracted by thoughts of proving himself to be more than just your friendly neighborhood 
-                    Spider-Man - but when the Vulture emerges as a new villain, everything that Peter holds most 
-                    important will be threatened. 
+                    {movie[0].synopsis_movie}
                     </p>
                 </div>
             </section>
@@ -137,4 +170,4 @@ function details_movie() {
   )
 }
 
-export default details_movie
+export default Details_movie
