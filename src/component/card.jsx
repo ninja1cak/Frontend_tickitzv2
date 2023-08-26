@@ -1,7 +1,7 @@
 import React from 'react'
 import banner from '../assets/movie-banner1.png'
 
-function Card() {
+function Card({title, banner, genre}) {
   return (
     <>
         <div className='relative '>
@@ -15,10 +15,16 @@ function Card() {
                 </div>
             </div>
             <div className='pt-8'>
-                <span className='text-xl font-medium'>Black Widow</span>
+                <span className='text-xl font-medium'>{title}</span>
                 <div className='grid grid-cols-2 gap-2'>
-                    <span className='btn rounded-full text-slate-400 cursor-default capitalize mt-5'>Action</span>
-                    <span className='btn rounded-full text-slate-400 cursor-default capitalize mt-5'>Adventure</span>
+                    <span className='btn rounded-full text-slate-400 cursor-default capitalize mt-5'>{genre[0]}</span>
+                    {
+                        genre[1] !== undefined ?                      
+                        <span className='btn rounded-full text-slate-400 cursor-default capitalize mt-5'>{genre[1]}</span>
+                        :
+                        <>
+                        </>
+                    }
                 </div>
             </div>
         </div>
