@@ -7,7 +7,7 @@ import facebook from '../../assets/fb.png'
 import eyeOpen from '../../assets/eye-open.png'
 import eyeClosed from '../../assets/eye-closed.png'
 
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import useApi from "../../helper/useApi";
 import { login } from "../../store/reducer/user";
@@ -25,6 +25,7 @@ const [btnState, setBtnState] = useState(true)
 const [status, setStatus] = useState(0)
 const [toggle, setToggle] = useState(false)
 const [checkbox, setCheckBox] = useState()
+const params = useParams()
 const inputChange = (e) =>{
     const data = {...form}
     data[e.target.name] = e.target.value
@@ -33,6 +34,16 @@ const inputChange = (e) =>{
 
 const handleCheckbox = (e) =>{
     setCheckBox(e.target.checked)
+}
+
+const verifyAccount = async () =>{
+    try {
+        const {data} = await api(`/auth/${params.token}`)
+        console.log(data)
+        setStatus(data.status+1)
+    } catch (error) {
+        
+    }
 }
 
 const goRegister = async () =>{
@@ -58,6 +69,9 @@ useEffect(() =>{
     if(isAuth)(
         navigate('/home')
     )
+    if(params.token){
+        verifyAccount()
+    }
 },[])
 
 useEffect(() =>{
@@ -67,7 +81,7 @@ useEffect(() =>{
     }else{
         setBtnState(false)
     }
-},[form, checkbox])
+},[form, checkbox, status])
 
   return (
     <>
@@ -81,8 +95,8 @@ useEffect(() =>{
                         <div className='hidden md:flex justify-center gap-5 mt-8'>
                             <div className='flex flex-col justify-center items-center'>
                                 {
-                                    status === 200 ?
-                                    <div className='h-10 w-10 flex justify-center items-center rounded-full bg-slate-400 text-white'>1</div>
+                                    status === 200 || status === 201?
+                                    <div className='h-10 w-10 flex justify-center items-center rounded-full bg-green-400 text-white'>1</div>
                                     :
                                     <div className='h-10 w-10 flex justify-center items-center rounded-full bg-blue-600 text-white'>1</div>
                                 }
@@ -95,6 +109,8 @@ useEffect(() =>{
                                 {
                                     status === 200 ?
                                     <div className='h-10 w-10 flex justify-center items-center rounded-full bg-blue-600 text-white'>2</div>
+                                    : status === 201 ? 
+                                    <div className='h-10 w-10 flex justify-center items-center rounded-full bg-green-400 text-white'>2</div>
                                     :
                                     <div className='h-10 w-10 flex justify-center items-center rounded-full bg-slate-400 text-white'>2</div>
                                 }
@@ -104,15 +120,28 @@ useEffect(() =>{
                                 <span className='text-xl'>- - - - -</span>
                             </div>
                             <div className='flex flex-col justify-center items-center'>
-                                <div className='h-10 w-10 flex justify-center items-center rounded-full bg-slate-400 text-white'>3</div>
+                                {
+                                    status === 201 ? 
+                                    <div className='h-10 w-10 flex justify-center items-center rounded-full bg-green-400 text-white'>3</div>
+                                    :
+                                    <div className='h-10 w-10 flex justify-center items-center rounded-full bg-slate-400 text-white'>3</div>
+
+
+                                }
                                 <span className='text-sm'>Done</span>
                             </div>
                         </div>
                         {
                             status === 200 ?
-                            <div>
-                                <span className=' text-lg font-medium mt-8'>Activate Your Account</span>
+                            <div className='mt-8'>
+                                <span className=' text-lg font-medium'>Activate Your Account</span>
                                 <p>Check your email for activate your account</p>
+                            </div>
+                            : status === 201 ? 
+                            <div className='mt-8'>
+                                <span className=' text-lg font-medium mt-8'>Activate Account Success</span>
+                        
+                                <p><Link to='/login' className=' text-primary font-bold hover:opacity-70 active:opacity-50' > Click here </Link> for go to login page</p>
                             </div>
                             :
                         <>

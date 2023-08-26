@@ -17,6 +17,7 @@ function router() {
             <Route path="/" element={<Home/>}/>
             <Route path="/login" element={<Login/>}/>
             <Route path="/register" element={<SignUp/>}/>
+            <Route path="/register/:token" element={<SignUp/>}/>
             <Route path="/order_page" element={<Order_page/>}/>
             <Route path="/payment_info" element={<Payment_page/>}/>
             <Route path="/check_payment" element={<Check_payment/>}/>
