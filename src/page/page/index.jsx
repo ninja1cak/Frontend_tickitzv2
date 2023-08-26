@@ -5,6 +5,7 @@ import bgHero from '../../assets/hero-bg-login.png'
 import lense from '../../assets/zoom-lens.png'
 import Card from '../../component/card'
 import useApi from '../../helper/useApi'
+import { useNavigate } from 'react-router'
 
 function Page() {
   const [slideIndex, setSlider] = useState(1)
@@ -16,7 +17,6 @@ function Page() {
   const [page, setPage]= useState(1)
   const [meta, setMeta]= useState([])
   const api = useApi()
-
     // const handlerSliderActive = (e) => {
   //   setSliderActive(e)
   // }
@@ -80,7 +80,7 @@ function Page() {
     <>
         <Header />
         <div className='h-screen flex flex-col'>
-        <div className='relative border border-red-900'>
+        <div className='relative'>
         <div className="carousel w-full">
             <div id="item1" className="carousel-item w-full h-[400px]">
               <img src={bgHero} className="w-full object-cover " />
@@ -105,7 +105,7 @@ function Page() {
           </div>
         </div>
 
-          <div className='left-0 right-0 top-1/2 w-[100%] my-16 mx-auto max-w-7xl border border-primary '>
+          <div className='left-0 right-0 top-1/2 w-[100%] my-16 mx-auto max-w-7xl'>
             <div className='flex flex-col md:flex-row items-start mx-5 md:items-center justify-start md:justify-center lg:justify-normal gap-x-20 lg:px-10 '>
               <div className='relative flex flex-col w-full md:w-1/3'>
                 <span className='font-medium pb-5'>Cari Event</span>
@@ -150,7 +150,7 @@ function Page() {
                 movie != null ? movie.map((data) => {
                   let genreArr = []
                   genreArr = data.genre.split(',')
-                  return <Card title={data.title_movie} banner={data.url_image_movie} genre={genreArr}  />
+                  return <Card title={data.title_movie} banner={data.url_image_movie} genre={genreArr} id_movie={data.id_movie}  />
 
                 }) 
                 :

@@ -14,7 +14,7 @@ function router() {
     <BrowserRouter>
         <Routes>
             <Route path="/buy_ticket/:id" element={<Buy_ticket/>}/>
-            <Route path="/home" element={<Home/>}/>
+            <Route path="/" element={<Home/>}/>
             <Route path="/login" element={<Login/>}/>
             <Route path="/register" element={<SignUp/>}/>
             <Route path="/order_page" element={<Order_page/>}/>
