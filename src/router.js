@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Page from "./page/details_movie/index";
+import Buy_ticket from "./page/details_movie/index";
 import Login from "./page/login/index";
 import SignUp from "./page/signup/index";
 import Order_page from "./page/Order_page/index"
@@ -13,7 +13,7 @@ function router() {
   return (
     <BrowserRouter>
         <Routes>
-            <Route path="/:id" element={<Page/>}/>
+            <Route path="/buy_ticket/:id" element={<Buy_ticket/>}/>
             <Route path="/home" element={<Home/>}/>
             <Route path="/login" element={<Login/>}/>
             <Route path="/register" element={<SignUp/>}/>
