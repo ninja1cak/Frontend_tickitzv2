@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import thumb from "../../../assets/movie-banner1.png"
 import Header from "../../../component/header";
 import useApi from "../../../helper/useApi";
@@ -9,7 +9,7 @@ function Admin_Movie() {
     const [movies, setMovies] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
-
+    const navigate = useNavigate()
     const fetchMovies = async (page) => {
         try {
           const response = await api.get(
@@ -149,7 +149,7 @@ function Admin_Movie() {
                                                         </defs>
                                                     </svg>
                                                 </button>
-                                                <button className="btn bg-[#5D5FEF] btn-sm">
+                                                <button onClick={() => navigate(`/admin/movie/update/${v.id_movie}`)} className="btn bg-[#5D5FEF] btn-sm">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
                                                         <g clip-path="url(#clip0_114_10522)">
                                                             <path d="M2.25 12.9376V15.7501H5.0625L13.3612 7.45133L10.5487 4.63883L2.25 12.9376ZM15.5287 5.28383C15.8212 4.99133 15.8212 4.51508 15.5287 4.22258L13.7775 2.47133C13.485 2.17883 13.0087 2.17883 12.7162 2.47133L11.3438 3.84383L14.1562 6.65633L15.5287 5.28383Z" fill="white"/>

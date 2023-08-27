@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import Header from '../../component/header'
 import Footer from '../../component/footer'
-import bgHero from '../../assets/hero-bg-login.png'
+import banner1 from '../../assets/banner1.jpg'
+import banner2 from '../../assets/banner2.jpg'
+import banner3 from '../../assets/banner3.webp'
+
 import lense from '../../assets/zoom-lens.png'
-import Card from '../../component/card'
+import Card from '../../component/card' 
 import useApi from '../../helper/useApi'
 import { useNavigate } from 'react-router'
 import { useDispatch, useSelector } from "react-redux";
@@ -86,17 +89,20 @@ function Page() {
         <Header />
         <div className='h-screen flex flex-col'>
         <div className='relative'>
-        <div className="carousel w-full">
-            <div id="item1" className="carousel-item w-full h-[400px]">
-              <img src={bgHero} className="w-full object-cover " />
+        <div className="carousel w-full h-[400px]">
+            <div id="item1" className="carousel-item w-full">
+              <img src={banner1} className="w-full object-cover" />
             </div> 
-            <div id="item2" className="carousel-item w-full h-[400px]">
-              <img src={bgHero} className="w-full object-cover" />
+            <div id="item2" className="carousel-item w-full">
+              <img src={banner2} className="w-full object-cover" />
             </div> 
-            <div id="item3" className="carousel-item w-full h-[400px]">
-              <img src={bgHero} className="w-full object-cover " />
+            <div id="item3" className="carousel-item w-full h-full">
+              <img src={banner3} className="w-full object-cover" />
             </div> 
-          </div> 
+            <div className="absolute w-full bg-black opacity-60 h-[400px]"> </div>
+
+        </div> 
+
         <div className='absolute top-20 text-white  w-[100%] max-w-7xl left-0 right-0 mx-auto'>
               <div className='w-[250px] md:w-[500px] flex flex-col ml-5'>
                 <span className='text-xl md:text-2xl font=semibold mb-4'>LIST MOVIE OF THE WEEK</span>

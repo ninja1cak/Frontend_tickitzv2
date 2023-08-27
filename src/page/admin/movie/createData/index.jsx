@@ -5,17 +5,97 @@ import useApi from "../../../../helper/useApi";
 import {  AiOutlinePicture } from 'react-icons/ai'
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import CreatableSelect from 'react-select/creatable';
+import Select from 'react-select';
 
 function Admin_Movie_create(){
     const api = useApi()
     const [selectedPicture, setSelectedPicture] = React.useState(false)
     const [pictureURI, setPictureURI] = React.useState('')
     const [pictureErr, setPictureErr] = React.useState(true)
-    
+    const [optionGenre, setOptionGenre] = useState()
+    const [optionCity, setOptionCity] = useState()
+    const [optionCinema, setOptionCinema] = useState()
+
+    const [genre, setGenre] = useState([])
+    const [city, setCity] = useState([])
+    const [cinema, setCinema] = useState([])
+
     const {data} = useSelector((s) => s.users)
     const navigate = useNavigate()
+
+    const createOption = (label) =>(
+        {
+            label,
+            value: label.toLowerCase().replace(/\W/g,'')
+        }
+    )
+
+    const getGenre = async () => {
+        try {
+            const {data} = await api('/movie/genre/')
+            // console.log(data)
+            const defaultOptions = [
+                ...data.data.map((v) => {
+                    return createOption(v.genre)
+                })
+            ]            
+            setOptionGenre(defaultOptions)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    
+    const getCity = async () => {
+        try {
+            const {data} = await api('/schedule/city/')
+            // console.log(data)
+            const defaultOptions = [
+                ...data.data.map((v) => {
+                    return createOption(v.city)
+                })
+            ]            
+            setOptionCity(defaultOptions)
+            console.log(defaultOptions)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const getCinema = async () => {
+        try {
+            const {data} = await api('/schedule/cinema/')
+            // console.log(data)
+            const defaultOptions = [
+                ...data.data.map((v) => {
+                    return createOption(v.cinema_name)
+                })
+            ]            
+            setOptionCinema(defaultOptions)
+            console.log(defaultOptions)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const handleChangeGenre = (newValue) => {
+        setGenre(newValue.map((v) => {return v.label}))
+    }
+
+    const handleChangeCity = (newValue) => {
+        setCity(newValue.map((v) => {return v.label}))
+    }
+
+    const handleChangeCinema = (newValue) => {
+        console.log(newValue.map((v) => {return v.label}), "cinema")
+        setCinema(newValue.map((v) => {return v.label}))
+    }
+
     const createMovie = async(values, {resetForm}) => {
         try {
+            console.log('tes', cinema)
+
             if (!selectedPicture) {
                 setPictureErr(false)
                 return
@@ -24,7 +104,6 @@ function Admin_Movie_create(){
             }
       
             const form = new FormData()
-            console.log('tes')
             Object.keys(values).forEach((key) => {
               console.log(key, ": ", values[key])
               if (values[key]) {
@@ -36,7 +115,7 @@ function Admin_Movie_create(){
                     //   console.log(formattedDate)
                       console.log('if 1 : ', key, ':', formattedDate)
                       form.append(key, formattedDate);
-                  }else if (key ==='genre' || key === 'city' || key ==='time' || key ==='cinema_name'){
+                  }else if (key ==='time'){
                       const valueArr = values[key].split(', ')
 
                       for(let i = 0 ; i<valueArr.length; i++){
@@ -52,6 +131,18 @@ function Admin_Movie_create(){
       
               }
           })
+
+          for(let i = 0 ; i<genre.length; i++){
+             form.append('genre', genre[i])
+          }
+          
+          for(let i = 0 ; i<city.length; i++){
+            form.append('city', city[i])
+         }
+         
+         for(let i = 0 ; i<cinema.length; i++){
+            form.append('cinema_name', cinema[i])
+         }
       
             if (selectedPicture) {
               form.append('file', selectedPicture)
@@ -91,7 +182,12 @@ function Admin_Movie_create(){
           if(data.data[0].role !== "admin"){
               navigate('/')
           }
-      });
+          getGenre()
+          getCity()
+          getCinema()
+          console.log([optionGenre])
+  
+      },[]);
 
     return(
         <>
@@ -121,7 +217,7 @@ function Admin_Movie_create(){
                   handleChange, handleBlur, handleSubmit,errors, touched, values
                 })=> (
                         <form onSubmit={handleSubmit}>
-                        <div className="flex flex-col gap-2 my-5 w-2/12">
+                        <div className="flex flex-col gap-2 my-5 w-[200px]">
                             <div className="border-2 rounded-lg mb-4">
                                 {!selectedPicture && (
                                 <div className="h-52 flex items-center justify-center">
@@ -151,14 +247,12 @@ function Admin_Movie_create(){
                             onChange={handleChange}
                             onBlur={handleBlur} />
                         </div>
+
                         <div className="flex flex-col gap-2 mt-3">
                             <label>Category</label>
-                            <input type="text" name="genre" 
-                            className="border-2 rounded p-5 border-gray-200"                               
-                            value={values.genre}
-                            onChange={handleChange}
-                            onBlur={handleBlur} />
+                            <CreatableSelect onChange={handleChangeGenre} isMulti options={optionGenre}></CreatableSelect>
                         </div>
+                        
                         <div className="flex justify-between gap-5">
                             <div className="flex flex-col gap-2 mt-3 w-full">
                                 <label>Release date</label>
@@ -207,21 +301,15 @@ function Admin_Movie_create(){
                                 ></textarea>
                             </div>
                         </div>
+ 
                         <div className="flex flex-col gap-2 mt-3">
                             <label>Add Location</label>
-                            <input type="text" name="city" 
-                            className="border-2 rounded p-5 border-gray-200"                               
-                            value={values.city}
-                            onChange={handleChange}
-                            onBlur={handleBlur} />
+                            <CreatableSelect onChange={handleChangeCity} isMulti options={optionCity}></CreatableSelect>
                         </div>
+
                         <div className="flex flex-col gap-2 mt-3">
                             <label>Add Cinema</label>
-                            <input type="text" name="cinema_name" 
-                            className="border-2 rounded p-5 border-gray-200"                               
-                            value={values.cinema_name}
-                            onChange={handleChange}
-                            onBlur={handleBlur} />
+                            <Select onChange={handleChangeCinema} isMulti options={optionCinema}></Select>
                         </div>
                         <div className="flex flex-col gap-2 mt-3">
                             <label>Set Date & Time</label>
