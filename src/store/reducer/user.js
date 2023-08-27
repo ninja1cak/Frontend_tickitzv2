@@ -5,7 +5,8 @@ const userSlice = createSlice({
     initialState: {
         isAuth: false,
         token: '',
-        data: {}
+        data: {},
+        dataBooking: {}
     },
     reducers: {
         login(state, actions) {
@@ -28,9 +29,15 @@ const userSlice = createSlice({
                 ...state,
                 data: actions.payload
             }
+        },
+        addDataBooking(state, actions) {
+            return {
+                ...state,
+                dataBooking: actions.payload
+            }
         }
     }
 })
 
-export const { login, logout, addData } = userSlice.actions
+export const { login, logout, addData, addDataBooking } = userSlice.actions
 export default userSlice.reducer
