@@ -6,6 +6,8 @@ import lense from '../../assets/zoom-lens.png'
 import Card from '../../component/card'
 import useApi from '../../helper/useApi'
 import { useNavigate } from 'react-router'
+import { useDispatch, useSelector } from "react-redux";
+import { addData } from '../../store/reducer/user'
 
 function Page() {
   const [slideIndex, setSlider] = useState(1)
@@ -20,7 +22,18 @@ function Page() {
     // const handlerSliderActive = (e) => {
   //   setSliderActive(e)
   // }
+  const {isAuth} =  useSelector((s) => s.users)
+  const dispatch = useDispatch()
 
+  const getUser = async () => {
+    try {
+      const {data} = await api('/user/profile')
+      console.log(data)
+      dispatch(addData(data))
+    } catch (error) {
+      console.log(error)
+    }
+  }
   const getMovie = async () => {
     try {
       const {data} = await api(`/movie?limit=12&search=${search}&sort=${filter}&page=${page}`)
@@ -68,6 +81,9 @@ function Page() {
   useEffect(() =>{
     getMovie()
     getGenre()
+    if(isAuth){
+      getUser()
+    }
   }, [])
 
   useEffect(() =>{
