@@ -12,6 +12,7 @@ import Admin_Dashboard from "./page/admin/dashboard"
 import Admin_Movie from "./page/admin/movie"
 import Admin_Movie_create from "./page/admin/movie/createData"
 import Admin_Movie_update from "./page/admin/movie/updateData"
+import Order_history from "./page/order_history";
 
 
 function router() {
@@ -27,6 +28,7 @@ function router() {
             <Route path="/payment_info" element={<Payment_page/>}/>
             <Route path="/check_payment" element={<Check_payment/>}/>
             <Route path="/profile" element={<Profile/>}/>
+            <Route path="/order_history" element={<Order_history/>}/>
             <Route path="/admin" element={<Admin_Dashboard/>}/>
             <Route path="/admin/movie" element={<Admin_Movie/>}/>
             <Route path="/admin/movie/create" element={<Admin_Movie_create/>}/>
