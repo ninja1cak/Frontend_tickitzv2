@@ -67,7 +67,7 @@ function Header() {
             </label>
             <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
               <li><Link to='/profile'>Profile</Link></li>
-              <li><Link to="/" onClick={()=>{dispatch(logout());dispatch(addData({}))}}>Logout</Link></li>
+              <li><Link to="/" onClick={()=>{dispatch(logout())}}>Logout</Link></li>
             </ul>
           </div>
           </div>
@@ -90,7 +90,7 @@ function Header() {
                     <li><Link to='/profile'>Profile</Link></li>
                     <li><Link to="/movie">List Movie</Link></li>
                     <li><Link to="/">Dashboard</Link></li>
-                    <li><Link to="/" onClick={()=>{dispatch(logout()); dispatch(addData({}))}}>Logout</Link></li>
+                    <li><Link to="/" onClick={()=>{dispatch(logout())}}>Logout</Link></li>
                 </ul>
             </div>
       ):(

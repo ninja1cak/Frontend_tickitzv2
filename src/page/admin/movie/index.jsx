@@ -132,7 +132,7 @@ function Admin_Movie() {
                                             </div>
                                         </td>
                                         <td>{v.title_movie}</td>
-                                        <td>{v.name_genre}</td>
+                                        <td>{v.genre}</td>
                                         <td>{v.release_date_movie}</td>
                                         <td>{v.duration_movie}</td>
                                         <th>

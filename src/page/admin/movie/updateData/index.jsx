@@ -21,23 +21,26 @@ function Admin_Movie_update(){
 
       const form = new FormData()
       Object.keys(values).forEach((key) => {
-          if (values[key]) {
-              if (key === 'release_date_movie') {
-                  form.append(key, moment(values[key]).format('YYYY-MM-DD'))
-              } else {
-                  form.append(key, values[key])
-              }
-          }
-
-          
-      })
+        if (values[key]) {
+            if (key === 'release_date_movie') {
+                const dateValue = new Date(values[key]);
+    
+                // Format the date as 'YYYY-MM-DD'
+                const formattedDate = `${dateValue.getFullYear()}-${(dateValue.getMonth() + 1).toString().padStart(2, '0')}-${dateValue.getDate().toString().padStart(2, '0')}`;
+    
+                form.append(key, formattedDate);
+            } else {
+                form.append(key, values[key]);
+            }
+        }
+    })
 
       if (selectedPicture) {
         form.append('url_image_movie', selectedPicture)
       }
 
 
-      const {data} = await api(token).post('/movie', form, {
+      const {data} = await api.post('/movie', form, {
         headers: {
             'Content-Type': 'multipart/form-data',
         },
@@ -78,7 +81,7 @@ function Admin_Movie_update(){
         <Header />
         <div className="bg-gray-200 w-full h-full flex flex-col items-center">
             <div className="w-7/12 bg-white p-10 my-5 rounded-lg">
-                <h1 className="font-bold text-lg">Update Movie</h1>
+                <h1 className="font-bold text-lg">Add New Movie</h1>
                 <div>
                     <Formik
                     initialValues={{
@@ -86,6 +89,7 @@ function Admin_Movie_update(){
                         director_movie: '',
                         duration_movie: '',
                         casts_movie: [],
+                        genre: '',
                         synopsis_movie: '',
                         release_date_movie: '',
                         url_image_movie: '',
@@ -129,9 +133,9 @@ function Admin_Movie_update(){
                         </div>
                         <div className="flex flex-col gap-2 mt-3">
                             <label>Category</label>
-                            <input type="text" name="name_genre" 
+                            <input type="text" name="genre" 
                             className="border-2 rounded p-5 border-gray-200"                               
-                            value={values.name_genre}
+                            value={values.genre}
                             onChange={handleChange}
                             onBlur={handleBlur} />
                         </div>
@@ -146,18 +150,11 @@ function Admin_Movie_update(){
                             </div>
                             <div className="flex flex-col gap-2 mt-3">
                                 <label>Duration (hour / minute)</label>
-                                <div className="flex gap-5">
                                     <input type="text" name="duration_movie" 
                                     className="border-2 rounded p-5 border-gray-200"                               
                                     value={values.duration_movie}
                                     onChange={handleChange}
                                     onBlur={handleBlur} />
-                                    <input type="text" name="duration_movie" 
-                                    className="border-2 rounded p-5 border-gray-200"                               
-                                    value={values.duration_movie}
-                                    onChange={handleChange}
-                                    onBlur={handleBlur} />
-                                </div>
                             </div>
                         </div>
                         <div className="flex flex-col gap-2 mt-3">
@@ -218,7 +215,7 @@ function Admin_Movie_update(){
                             </div>
                         </div>
                         <hr className="my-5"/>
-                        <button className="w-full bg-primary font-bold text-white py-3 rounded">Save Movie</button>
+                        <button type="submit" className="w-full bg-primary font-bold text-white py-3 rounded">Save Movie</button>
 
                         </form>
                     )}

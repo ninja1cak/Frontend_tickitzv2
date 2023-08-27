@@ -64,9 +64,10 @@ function Admin_Movie_create(){
     }
 
     const formattedDuration = () => {
-        const hour = parseInt(values.duration_hour) || 0;
-        const minute = parseInt(values.duration_minute) || 0;
-    
+        // const hour = parseInt(values.duration_hour) || 0;
+        // const minute = parseInt(values.duration_minute) || 0;
+        const hour = 0
+        const minute = 0
         if (hour === 0) {
           return `${minute} Minute`;
         } else if (minute === 0) {
@@ -89,6 +90,7 @@ function Admin_Movie_create(){
                         director_movie: '',
                         duration_movie: '',
                         casts_movie: [],
+                        genre: '',
                         synopsis_movie: '',
                         release_date_movie: '',
                         url_image_movie: '',
@@ -132,9 +134,9 @@ function Admin_Movie_create(){
                         </div>
                         <div className="flex flex-col gap-2 mt-3">
                             <label>Category</label>
-                            <input type="text" name="name_genre" 
+                            <input type="text" name="genre" 
                             className="border-2 rounded p-5 border-gray-200"                               
-                            value={values.name_genre}
+                            value={values.genre}
                             onChange={handleChange}
                             onBlur={handleBlur} />
                         </div>
@@ -149,18 +151,11 @@ function Admin_Movie_create(){
                             </div>
                             <div className="flex flex-col gap-2 mt-3">
                                 <label>Duration (hour / minute)</label>
-                                <div className="flex gap-5">
                                     <input type="text" name="duration_movie" 
                                     className="border-2 rounded p-5 border-gray-200"                               
                                     value={values.duration_movie}
                                     onChange={handleChange}
                                     onBlur={handleBlur} />
-                                    <input type="text" name="duration_movie" 
-                                    className="border-2 rounded p-5 border-gray-200"                               
-                                    value={values.duration_movie}
-                                    onChange={handleChange}
-                                    onBlur={handleBlur} />
-                                </div>
                             </div>
                         </div>
                         <div className="flex flex-col gap-2 mt-3">
