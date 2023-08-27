@@ -4,13 +4,16 @@ import { Formik } from "formik";
 import useApi from "../../../../helper/useApi";
 import {  AiOutlinePicture } from 'react-icons/ai'
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 function Admin_Movie_update(){
     const api = useApi
     const [selectedPicture, setSelectedPicture] = React.useState(false)
     const [pictureURI, setPictureURI] = React.useState('')
     const [pictureErr, setPictureErr] = React.useState(true)
-
+    const {data} = useSelector((s) => s.users)
+    const navigate = useNavigate()
+    
     const createMovie = async(values, {resetForm}) => {
         if (!selectedPicture) {
           setPictureErr(false)
@@ -63,19 +66,12 @@ function Admin_Movie_update(){
         fileToDataUrl(file)
     }
 
-    const formattedDuration = () => {
-        const hour = parseInt(values.duration_hour) || 0;
-        const minute = parseInt(values.duration_minute) || 0;
-    
-        if (hour === 0) {
-          return `${minute} Minute`;
-        } else if (minute === 0) {
-          return `${hour} Hour`;
-        } else {
-          return `${hour} Hour ${minute} Minute`;
+    useEffect(() => {
+        document.title = 'Admin Page - Create Movie';
+        if(data.data[0].role !== "admin"){
+            navigate('/')
         }
-      };
-
+    });
     return(
         <>
         <Header />

@@ -59,6 +59,8 @@ const handleToggle = () => {
 }
 
 useEffect(() =>{
+    document.title = 'Tickitz - Login'
+
     if(isAuth)(
         navigate('/')
     )

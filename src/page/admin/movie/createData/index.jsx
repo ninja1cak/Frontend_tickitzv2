@@ -4,50 +4,73 @@ import { Formik } from "formik";
 import useApi from "../../../../helper/useApi";
 import {  AiOutlinePicture } from 'react-icons/ai'
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 function Admin_Movie_create(){
-    const api = useApi
+    const api = useApi()
     const [selectedPicture, setSelectedPicture] = React.useState(false)
     const [pictureURI, setPictureURI] = React.useState('')
     const [pictureErr, setPictureErr] = React.useState(true)
-
+    
+    const {data} = useSelector((s) => s.users)
+    const navigate = useNavigate()
     const createMovie = async(values, {resetForm}) => {
-        if (!selectedPicture) {
-          setPictureErr(false)
-          return
-      } else {
-          setPictureErr(true)
-      }
-
-      const form = new FormData()
-      Object.keys(values).forEach((key) => {
-        if (values[key]) {
-            if (key === 'release_date_movie') {
-                const dateValue = new Date(values[key]);
-    
-                // Format the date as 'YYYY-MM-DD'
-                const formattedDate = `${dateValue.getFullYear()}-${(dateValue.getMonth() + 1).toString().padStart(2, '0')}-${dateValue.getDate().toString().padStart(2, '0')}`;
-    
-                form.append(key, formattedDate);
+        try {
+            if (!selectedPicture) {
+                setPictureErr(false)
+                return
             } else {
-                form.append(key, values[key]);
+                setPictureErr(true)
             }
+      
+            const form = new FormData()
+            console.log('tes')
+            Object.keys(values).forEach((key) => {
+              console.log(key, ": ", values[key])
+              if (values[key]) {
+                  if (key === 'release_date_movie' || key ==='date_start' || key ==='date_end') {
+                      const dateValue = new Date(values[key]);
+                      
+                      // Format the date as 'YYYY-MM-DD'
+                      const formattedDate = `${dateValue.getFullYear()}-${(dateValue.getMonth() + 1).toString().padStart(2, '0')}-${dateValue.getDate().toString().padStart(2, '0')}T00:00:00Z`;
+                    //   console.log(formattedDate)
+                      console.log('if 1 : ', key, ':', formattedDate)
+                      form.append(key, formattedDate);
+                  }else if (key ==='genre' || key === 'city' || key ==='time' || key ==='cinema_name'){
+                      const valueArr = values[key].split(', ')
+
+                      for(let i = 0 ; i<valueArr.length; i++){
+                        console.log(`${key}`, valueArr[i])
+                        form.append(`${key}`, valueArr[i])
+                      }
+                  } else {
+                      console.log('if 3 :', key, ':', values[key])
+      
+                      form.append(key, values[key]);
+                  }
+      
+      
+              }
+          })
+      
+            if (selectedPicture) {
+              form.append('file', selectedPicture)
+            }
+      
+      
+            const {data} = await api.post('/movie/', form, {
+              headers: {
+                  'Content-Type': 'multipart/form-data',
+              },
+            })
+            console.log(data)
+            setSelectedPicture(false)
+          //   resetForm()
+      
+        } catch (error) {
+            console.log(error)
         }
-    })
-
-      if (selectedPicture) {
-        form.append('url_image_movie', selectedPicture)
-      }
-
-
-      const {data} = await api.post('/movie', form, {
-        headers: {
-            'Content-Type': 'multipart/form-data',
-        },
-      })
-      setSelectedPicture(false)
-      resetForm()
-
+        
     }
     const fileToDataUrl = (file) => {
         const reader = new FileReader()
@@ -63,19 +86,12 @@ function Admin_Movie_create(){
         fileToDataUrl(file)
     }
 
-    const formattedDuration = () => {
-        // const hour = parseInt(values.duration_hour) || 0;
-        // const minute = parseInt(values.duration_minute) || 0;
-        const hour = 0
-        const minute = 0
-        if (hour === 0) {
-          return `${minute} Minute`;
-        } else if (minute === 0) {
-          return `${hour} Hour`;
-        } else {
-          return `${hour} Hour ${minute} Minute`;
-        }
-      };
+      useEffect(() => {
+          document.title = 'Admin Page - Create Movie';
+          if(data.data[0].role !== "admin"){
+              navigate('/')
+          }
+      });
 
     return(
         <>
@@ -89,7 +105,7 @@ function Admin_Movie_create(){
                         title_movie: '',
                         director_movie: '',
                         duration_movie: '',
-                        casts_movie: [],
+                        casts_movie: '',
                         genre: '',
                         synopsis_movie: '',
                         release_date_movie: '',
@@ -97,6 +113,9 @@ function Admin_Movie_create(){
                         city:'',
                         date_start: '',
                         date_end: '',
+                        price_seat: 0,
+                        cinema_name: '',
+                        time: ''
                     }} onSubmit={createMovie}>
                 {({
                   handleChange, handleBlur, handleSubmit,errors, touched, values
@@ -143,7 +162,7 @@ function Admin_Movie_create(){
                         <div className="flex justify-between gap-5">
                             <div className="flex flex-col gap-2 mt-3 w-full">
                                 <label>Release date</label>
-                                <input type="text" name="release_date_movie" 
+                                <input type="date" name="release_date_movie" 
                                 className="border-2 rounded p-5 border-gray-200"                               
                                 value={values.release_date_movie}
                                 onChange={handleChange}
@@ -197,6 +216,14 @@ function Admin_Movie_create(){
                             onBlur={handleBlur} />
                         </div>
                         <div className="flex flex-col gap-2 mt-3">
+                            <label>Add Cinema</label>
+                            <input type="text" name="cinema_name" 
+                            className="border-2 rounded p-5 border-gray-200"                               
+                            value={values.cinema_name}
+                            onChange={handleChange}
+                            onBlur={handleBlur} />
+                        </div>
+                        <div className="flex flex-col gap-2 mt-3">
                             <label>Set Date & Time</label>
                             <div className="flex gap-3 items-center">
                                 <input type="date" name="date_start" 
@@ -214,6 +241,22 @@ function Admin_Movie_create(){
                                 onBlur={handleBlur} />
 
                             </div>
+                        </div>
+                        <div className="flex flex-col gap-2 mt-3">
+                            <label>Time</label>
+                            <input type="text" name="time" 
+                            className="border-2 rounded p-5 border-gray-200"                               
+                            value={values.time}
+                            onChange={handleChange}
+                            onBlur={handleBlur} />
+                        </div>
+                        <div className="flex flex-col gap-2 mt-3">
+                            <label>Ticket Price</label>
+                            <input type="number" name="price_seat" 
+                            className="border-2 rounded p-5 border-gray-200"                               
+                            value={values.price_seat}
+                            onChange={handleChange}
+                            onBlur={handleBlur} />
                         </div>
                         <hr className="my-5"/>
                         <button type="submit" className="w-full bg-primary font-bold text-white py-3 rounded">Save Movie</button>

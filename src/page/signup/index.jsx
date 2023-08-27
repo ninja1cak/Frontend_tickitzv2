@@ -71,6 +71,7 @@ const handleToggle = () => {
     setToggle(!toggle)
 }
 useEffect(() =>{
+    document.title = 'Tickitz - Sign Up'
     if(isAuth)(
         navigate('/home')
     )

@@ -25,15 +25,6 @@ function Page() {
   const {isAuth} =  useSelector((s) => s.users)
   const dispatch = useDispatch()
 
-  const getUser = async () => {
-    try {
-      const {data} = await api('/user/profile')
-      console.log(data)
-      dispatch(addData(data))
-    } catch (error) {
-      console.log(error)
-    }
-  }
   const getMovie = async () => {
     try {
       const {data} = await api(`/movie?limit=12&search=${search}&sort=${filter}&page=${page}`)
@@ -79,11 +70,11 @@ function Page() {
   }
 
   useEffect(() =>{
+   
+    document.title = 'Tickitz - Home'
     getMovie()
     getGenre()
-    if(isAuth){
-      getUser()
-    }
+
   }, [])
 
   useEffect(() =>{
