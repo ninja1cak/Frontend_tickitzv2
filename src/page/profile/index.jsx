@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react'
+import { SliderComponent } from '@syncfusion/ej2-react-inputs';
 import { useNavigate } from 'react-router-dom'
 import Header from '../../component/header'
 import Footer from '../../component/footer'
@@ -139,9 +140,22 @@ function Profile() {
                 </div>
             </div>
             <div className="block border-t border-gray-300 bg-white py-6 rounded-b-lg">
-                <button className="block bg-primary h-11 w-40 text-white tracking-wider text-sm mx-auto rounded-lg hover:opacity-50 active:opacity-100 active:bg-white active:text-primary border active:border-primary">
+                {/* <button className="block bg-primary h-11 w-40 text-white tracking-wider text-sm mx-auto rounded-lg hover:opacity-50 active:opacity-100 active:bg-white active:text-primary border active:border-primary">
                 Logout
-                </button>
+                </button> */}
+                <div>
+                    <span>Loyalty Points</span>
+                    <div>
+                        <img src="" alt="" />
+                        <div>
+                            <span>Movigoers</span>
+                            <span>320</span>
+                            <span>points</span>
+                        </div>
+                    </div>
+                    <span>180 points become a master</span>
+                    <SliderComponent id='slider' value={30} />
+                </div>
             </div>
             </section>
             <div className="lg:w-[100%]">
