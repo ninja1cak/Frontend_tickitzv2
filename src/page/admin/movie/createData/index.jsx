@@ -64,9 +64,10 @@ function Admin_Movie_create(){
     }
 
     const formattedDuration = () => {
-        const hour = parseInt(values.duration_hour) || 0;
-        const minute = parseInt(values.duration_minute) || 0;
-    
+        // const hour = parseInt(values.duration_hour) || 0;
+        // const minute = parseInt(values.duration_minute) || 0;
+        const hour = 0
+        const minute = 0
         if (hour === 0) {
           return `${minute} Minute`;
         } else if (minute === 0) {
