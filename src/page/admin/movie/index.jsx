@@ -2,6 +2,7 @@ import React, {useState, useEffect} from "react";
 import { Link, useNavigate } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import moment from 'moment'
 import Header from "../../../component/header";
 import useApi from "../../../helper/useApi";
 import Footer from "../../../component/footer"
@@ -34,7 +35,13 @@ function Admin_Movie() {
                 meta : 0,
               }
             }
-            setMovies(data.data)
+    
+            const moviesWithFormattedDates = data.data.map(movie => ({
+                ...movie,
+                release_date_movie: moment(movie.release_date_movie).format('DD MMMM YYYY'),
+            }));
+    
+            setMovies(moviesWithFormattedDates);
             setMeta(data.meta)
             
           } catch (error) {

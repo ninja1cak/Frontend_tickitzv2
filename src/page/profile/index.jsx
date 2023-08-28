@@ -246,11 +246,10 @@ function Profile() {
                 <div className="block bg-white mx-3 p-6 rounded-t-lg ">
                 <p>INFO</p>
                 <div className="flex flex-col items-center mt-6 tracking-wider">
-                    <img
-                    className="mx-auto rounded-full h-36"
-                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                    <img onClick={onImageClick}
+                    className="object-cover mx-auto rounded-full h-36 w-36 cursor-pointer"
+                    src={ image ? URL.createObjectURL(image) : (user.url_photo_user == null ? PP : user.url_photo_user ) }
                     />
-                    <p className="font-medium text-lg mt-4 mb-2">test_satu</p>
                     <p className="font-medium text-lg mt-4 mb-2">{`${user.first_name} ${user.last_name}`}</p>
                     <p className="text-sm text-gray-600 ">Moviegoers</p>
                 </div>
