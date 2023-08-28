@@ -1,10 +1,18 @@
 import React, { useEffect } from "react";
 import charts from '../../../assets/chart.png'
 import Header from "../../../component/header";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+
 
 function Admin_Dashboard() {
+    const {data} = useSelector((s) => s.users)
+    const navigate = useNavigate()
     useEffect(() => {
         document.title = 'Admin Page - Dashboard';
+        if(data.data[0].role !== "admin"){
+            navigate('/')
+        }
     });
 
     return (
