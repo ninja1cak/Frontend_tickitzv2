@@ -189,7 +189,7 @@ function Admin_Movie() {
                                         </td>
                                         <td>{v.title_movie}</td>
                                         <td>{v.genre}</td>
-                                        <td>{v.release_date_movie.slice(0,10)}</td>
+                                        <td>{v.release_date_movie}</td>
                                         <td>{v.duration_movie}</td>
                                         <th>
                                             <div className="flex gap-1">
