@@ -4,6 +4,8 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Header from "../../../component/header";
 import useApi from "../../../helper/useApi";
+import Footer from "../../../component/footer"
+import { useSelector } from "react-redux";
 
 function Admin_Movie() {
     const api = useApi();
@@ -12,20 +14,19 @@ function Admin_Movie() {
     const [meta, setMeta]= useState([])
     const [selectedDate, setSelectedDate] = useState(null);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
-    const [movieToDelete, setMovieToDelete] = useState(null);
+    const [movieToDelete, setMovieToDelete] = useState(null);   
+    const {data} = useSelector((s) => s.users)
     const navigate = useNavigate()
-    
     const fetchMovies = async () => {
         try {
             // const {data} = await api(`/movie?limit=12&page=${page}`)
-            let url = `/movie?limit=5&page=${page}&id_movie`;
-        
+            let formattedDate = ''
+
             if (selectedDate) {
-                const formattedDate = selectedDate.toISOString().split('T')[0];
-                url = `/movie?limit=5&page=${page}&release_date=${formattedDate}`;
+                formattedDate = selectedDate + '-01'
             }
     
-            const {data} = await api(url);
+            const {data} = await api(`/movie?limit=5&page=${page}&release_date=${formattedDate}`);
             if(data.meta === undefined){
               data.meta = {
                 next : 0,
@@ -41,8 +42,8 @@ function Admin_Movie() {
           }
         }
     
-    const handleDateChange = (date) => {
-        setSelectedDate(date);
+    const handleDateChange = (e) => {
+        setSelectedDate(e.target.value);
         setPage(1); // Reset page to 1 when changing date
     };
         
@@ -73,12 +74,15 @@ function Admin_Movie() {
 
     useEffect(() =>{
         fetchMovies()
-      }, [page])
+      }, [page, selectedDate])
 
 
     useEffect(() => {
-        document.title = 'Admin Page - Movie Manage';
-    });
+        document.title = 'Admin Page - Movie Manage'
+        if(data.data[0].role !== "admin"){
+            navigate('/')
+        }
+    },[])
 
     return (
         <>
@@ -86,7 +90,7 @@ function Admin_Movie() {
         {/* Dashboard Admin Movie Start */}
         <div className="bg-gray-200 w-full h-full flex flex-col items-center">
             {/* Container Movie Start */}
-            <div className="w-10/12 bg-white p-10 my-5 rounded-lg">
+            <div className="w-[90%] max-w-7xl xl:mx-auto bg-white p-10 my-5 rounded-lg">
                 {/* Header Container Start (Mobile) */}
                 <div className="flex flex-col my-5 md:hidden lg:hidden">
                     <div className="flex justify-between">
@@ -100,13 +104,18 @@ function Admin_Movie() {
                         </Link>
                     </div>
                     <div>
-                        <div className="w-full" data-te-datepicker-init data-te-inline="true" data-te-input-wrapper-init>
-                            <DatePicker
+                        <div className="flex justify-end items-end my-10">
+                            {/* <DatePicker
                                 selected={selectedDate}
                                 onChange={handleDateChange}
                                 placeholderText="Select date"
                                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                            />
+                            /> */}
+                            <input 
+                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-[100%] max-w-[170px] pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                type="month" id="start" 
+                                
+                                onChange={handleDateChange}/>
                         </div>
                     </div>
                 </div>
@@ -119,12 +128,12 @@ function Admin_Movie() {
                     <div className="flex items-center gap-3">
                         <div>
                             <div className="relative max-w-sm">
-                                <DatePicker
-                                    selected={selectedDate}
-                                    onChange={handleDateChange}
-                                    placeholderText="Select date"
-                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                />
+                               <input 
+                               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                type="month" id="start" 
+                                
+                                onChange={handleDateChange}/>
+
                             </div>
                         </div>
                         <Link to="/admin/movie/create/">
@@ -173,7 +182,7 @@ function Admin_Movie() {
                                         </td>
                                         <td>{v.title_movie}</td>
                                         <td>{v.genre}</td>
-                                        <td>{v.release_date_movie}</td>
+                                        <td>{v.release_date_movie.slice(0,10)}</td>
                                         <td>{v.duration_movie}</td>
                                         <th>
                                             <div className="flex gap-1">
@@ -228,27 +237,30 @@ function Admin_Movie() {
                 </div>
                 <div>
                 {showDeleteModal && (
-                    <div className={`fixed inset-0 z-999 flex items-center justify-center`}>
-                        {/* <div className="fixed inset-0 bg-gray-900 opacity-60"></div> */}
-                            <div className="bg-white w-1/3 p-4 rounded shadow-md z-999">
-                                <h2 className="text-xl font-semibold mb-4">Confirm Deletion</h2>
-                                <p className="mb-4">Are you sure you want to delete this movies?</p>
-                                <div className="flex justify-end">
-                                    <button
-                                        onClick={handleCancelDelete}
-                                        className="px-4 py-2 text-gray-500 hover:text-gray-700"
-                                    >
-                                        Cancel
-                                    </button>
-                                    <button
-                                        onClick={handleConfirmDelete}
-                                        className="px-4 py-2 bg-red-500 text-white ml-2 rounded hover:bg-red-700"
-                                    >
-                                        Confirm
-                                    </button>
+                    <>
+                       <div className="fixed inset-0 bg-gray-900 opacity-60"></div>
+                        <div className="fixed inset-0 z-999 flex items-center justify-center">
+                                <div className="bg-white w-1/3 p-4 rounded shadow-md z-999">
+                                    <h2 className="text-xl font-semibold mb-4">Confirm Deletion</h2>
+                                    <p className="mb-4">Are you sure you want to delete this movies?</p>
+                                    <div className="flex justify-end">
+                                        <button
+                                            onClick={handleCancelDelete}
+                                            className="px-4 py-2 text-gray-500 hover:text-gray-700"
+                                        >
+                                            Cancel
+                                        </button>
+                                        <button
+                                            onClick={handleConfirmDelete}
+                                            className="px-4 py-2 bg-red-500 text-white ml-2 rounded hover:bg-red-700"
+                                        >
+                                            Confirm
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
-                    </div>
+                        </div>
+                    </>
+
                 )}
                 </div>
                 {/* Content Container End */}
@@ -256,14 +268,14 @@ function Admin_Movie() {
             {/* Pagination Start */}
             <div>
                 <div className='flex justify-center gap-5'>
-                    <div className=' flex gap-x-4 justify-center mt-5'>
+                    <div className=' flex gap-x-4 justify-center my-5'>
                         {
                             page == 1 ?  <button disabled className="btn btn-sm btn-outline btn-primary border border-white w-24 bg-white shadow-lg">Previous</button>:<button onClick={() => setPage(meta.prev)} className="btn btn-sm text-primary hover:bg-primary hover:text-white  border border-white w-24 bg-white shadow-lg">Previous</button>
                         }
                         <button className="btn btn-sm btn-outline bg-primary border border-white w-24 text-white" >{page}</button>
                         
                         {
-                            Math.ceil((meta.total/3)) == page || Math.ceil((meta.total/12)) == 0 ? <button disabled className="btn btn-sm btn-outline btn-primary border border-white w-24 bg-white shadow-lg">Next</button> : <button onClick={() => setPage(meta.next)} className="btn btn-sm text-primary hover:bg-primary hover:text-white  border-white w-24 bg-white shadow-lg">Next</button>
+                            Math.ceil((meta.total/5)) == page || Math.ceil((meta.total/5)) == 0 ? <button disabled className="btn btn-sm btn-outline btn-primary border border-white w-24 bg-white shadow-lg">Next</button> : <button onClick={() => setPage(meta.next)} className="btn btn-sm text-primary hover:bg-primary hover:text-white  border-white w-24 bg-white shadow-lg">Next</button>
                         }
                     </div>
                         {/* <div className='btn w-12 h-10 rounded-full font-bold text-slate-400'>1</div>
@@ -276,6 +288,7 @@ function Admin_Movie() {
             {/* Container Movie End */}
         </div>
         {/* Dashoboard Admin Movie End */}
+        <Footer></Footer>
         </>
     )
 

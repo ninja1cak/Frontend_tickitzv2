@@ -21,7 +21,7 @@ function Admin_Dashboard() {
         {/* Dashboard Admin Start */}
         <div className="bg-gray-200 w-full h-full flex flex-col items-center">
             {/* Container Sales Chart Start */}
-            <div className="w-10/12 bg-white p-10 my-5 rounded-lg">
+            <div className="w-[100%] max-w-7xl bg-white p-10 my-5 rounded-lg">
                 <h1 className="font-bold ">Sales Chart</h1>
                 {/* Button (Sort Movie, Weekly and Filter) Start */}
                 <div className="flex gap-3 my-3">
@@ -59,7 +59,7 @@ function Admin_Dashboard() {
             </div>
             {/* Container Sales Chart End */}
             {/* Container Ticket Sales Start */}
-            <div className="w-10/12 bg-white p-10 my-5 rounded-lg">
+            <div className="w-[100%] max-w-7xl bg-white p-10 my-5 rounded-lg">
                 <h1 className="font-bold">Ticket Sales</h1>
                     {/* Button (Sort Movie, Weekly and Filter) Start */}
                     <div className="flex gap-3 my-3">
