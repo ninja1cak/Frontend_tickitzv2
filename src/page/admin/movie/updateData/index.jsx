@@ -36,7 +36,6 @@ function Admin_Movie_update(){
 
       const updateMovie = async(values, {resetForm}) => {
         try {
-            window.my_modal_1.showModal()
             let count = 0 
             if (!selectedPicture) {
                 setPictureErr(false)
@@ -44,7 +43,8 @@ function Admin_Movie_update(){
                 setPictureErr(true)
                 count++
             }
-      
+            window.my_modal_1.showModal()
+
             const form = new FormData()
             console.log('tes')
             Object.keys(values).forEach((key) => {

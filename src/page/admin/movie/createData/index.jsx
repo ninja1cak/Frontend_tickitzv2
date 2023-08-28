@@ -94,7 +94,6 @@ function Admin_Movie_create(){
 
     const createMovie = async(values, {resetForm}) => {
         try {
-            window.my_modal_1.showModal()
 
             let next = true
             if (!selectedPicture) {
@@ -103,6 +102,7 @@ function Admin_Movie_create(){
             } else {
                 setPictureErr(true)
             }
+            window.my_modal_1.showModal()
       
             const form = new FormData()
             Object.keys(values).forEach((key) => {
