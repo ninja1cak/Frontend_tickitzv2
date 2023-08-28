@@ -5,8 +5,6 @@ import "react-datepicker/dist/react-datepicker.css";
 import moment from 'moment'
 import Header from "../../../component/header";
 import useApi from "../../../helper/useApi";
-import Footer from "../../../component/footer"
-import { useSelector } from "react-redux";
 
 function Admin_Movie() {
     const api = useApi();
@@ -15,25 +13,25 @@ function Admin_Movie() {
     const [meta, setMeta]= useState([])
     const [selectedDate, setSelectedDate] = useState(null);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
-    const [movieToDelete, setMovieToDelete] = useState(null);   
-    const {data} = useSelector((s) => s.users)
+    const [movieToDelete, setMovieToDelete] = useState(null);
     const navigate = useNavigate()
+    
     const fetchMovies = async () => {
         try {
-            // const {data} = await api(`/movie?limit=12&page=${page}`)
-            let formattedDate = ''
-
+            let url = `/movie?limit=5&page=${page}&id_movie`;
+    
             if (selectedDate) {
-                formattedDate = selectedDate + '-01'
+                const formattedDate = selectedDate.toISOString().split('T')[0];
+                url = `/movie?limit=5&page=${page}&release_date=${formattedDate}`;
             }
     
-            const {data} = await api(`/movie?limit=5&page=${page}&release_date=${formattedDate}`);
-            if(data.meta === undefined){
-              data.meta = {
-                next : 0,
-                prev : 0,
-                meta : 0,
-              }
+            const { data } = await api(url);
+            if (data.meta === undefined) {
+                data.meta = {
+                    next: 0,
+                    prev: 0,
+                    meta: 0,
+                };
             }
     
             const moviesWithFormattedDates = data.data.map(movie => ({
@@ -49,9 +47,9 @@ function Admin_Movie() {
           }
         }
     
-    const handleDateChange = (e) => {
-        setSelectedDate(e.target.value);
-        setPage(1); // Reset page to 1 when changing date
+    const handleDateChange = (date) => {
+        setSelectedDate(date);
+        setPage(1); 
     };
         
     const handleDelete = async (id_movie) => {
@@ -81,23 +79,20 @@ function Admin_Movie() {
 
     useEffect(() =>{
         fetchMovies()
-      }, [page, selectedDate])
+      }, [page])
 
 
     useEffect(() => {
-        document.title = 'Admin Page - Movie Manage'
-        if(data.data[0].role !== "admin"){
-            navigate('/')
-        }
-    },[])
+        document.title = 'Admin Page - Movie Manage';
+    });
 
     return (
         <>
         <Header />
         {/* Dashboard Admin Movie Start */}
-        <div className="bg-gray-200 w-full h-full flex flex-col items-center">
+        <div className="bg-gray-100 w-full h-full flex flex-col items-center">
             {/* Container Movie Start */}
-            <div className="w-[90%] max-w-7xl xl:mx-auto bg-white p-10 my-5 rounded-lg">
+            <div className="w-10/12 bg-white p-10 my-5 rounded-lg">
                 {/* Header Container Start (Mobile) */}
                 <div className="flex flex-col my-5 md:hidden lg:hidden">
                     <div className="flex justify-between">
@@ -111,18 +106,13 @@ function Admin_Movie() {
                         </Link>
                     </div>
                     <div>
-                        <div className="flex justify-end items-end my-10">
-                            {/* <DatePicker
+                        <div className="w-full flex justify-center my-5" data-te-datepicker-init data-te-inline="true" data-te-input-wrapper-init>
+                            <DatePicker
                                 selected={selectedDate}
                                 onChange={handleDateChange}
                                 placeholderText="Select date"
                                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                            /> */}
-                            <input 
-                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-[100%] max-w-[170px] pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                type="month" id="start" 
-                                
-                                onChange={handleDateChange}/>
+                            />
                         </div>
                     </div>
                 </div>
@@ -135,12 +125,12 @@ function Admin_Movie() {
                     <div className="flex items-center gap-3">
                         <div>
                             <div className="relative max-w-sm">
-                               <input 
-                               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                type="month" id="start" 
-                                
-                                onChange={handleDateChange}/>
-
+                                <DatePicker
+                                    selected={selectedDate}
+                                    onChange={handleDateChange}
+                                    placeholderText="Select date"
+                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                />
                             </div>
                         </div>
                         <Link to="/admin/movie/create/">
@@ -193,7 +183,7 @@ function Admin_Movie() {
                                         <td>{v.duration_movie}</td>
                                         <th>
                                             <div className="flex gap-1">
-                                                <button className="btn bg-[#1D4ED8] btn-sm">
+                                                <button onClick={() => navigate(`/buy_ticket/${v.id_movie}`)} className="btn bg-[#1D4ED8] btn-sm">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
                                                         <g clip-path="url(#clip0_114_10497)">
                                                         <path d="M9 3.375C5.25 3.375 2.0475 5.7075 0.75 9C2.0475 12.2925 5.25 14.625 9 14.625C12.7537 14.625 15.9525 12.2925 17.25 9C15.9525 5.7075 12.7537 3.375 9 3.375ZM9 12.75C6.93 12.75 5.25 11.07 5.25 9C5.25 6.93 6.93 5.25 9 5.25C11.07 5.25 12.75 6.93 12.75 9C12.75 11.07 11.07 12.75 9 12.75ZM9 6.75C7.75875 6.75 6.75 7.75875 6.75 9C6.75 10.2413 7.75875 11.25 9 11.25C10.2413 11.25 11.25 10.2413 11.25 9C11.25 7.75875 10.2413 6.75 9 6.75Z" fill="white"/>
@@ -244,30 +234,27 @@ function Admin_Movie() {
                 </div>
                 <div>
                 {showDeleteModal && (
-                    <>
-                       <div className="fixed inset-0 bg-gray-900 opacity-60"></div>
-                        <div className="fixed inset-0 z-999 flex items-center justify-center">
-                                <div className="bg-white w-1/3 p-4 rounded shadow-md z-999">
-                                    <h2 className="text-xl font-semibold mb-4">Confirm Deletion</h2>
-                                    <p className="mb-4">Are you sure you want to delete this movies?</p>
-                                    <div className="flex justify-end">
-                                        <button
-                                            onClick={handleCancelDelete}
-                                            className="px-4 py-2 text-gray-500 hover:text-gray-700"
-                                        >
-                                            Cancel
-                                        </button>
-                                        <button
-                                            onClick={handleConfirmDelete}
-                                            className="px-4 py-2 bg-red-500 text-white ml-2 rounded hover:bg-red-700"
-                                        >
-                                            Confirm
-                                        </button>
-                                    </div>
+                    <div className={`fixed inset-0 z-999 flex items-center justify-center`}>
+                        {/* <div className="fixed inset-0 bg-gray-900 opacity-60"></div> */}
+                            <div className="bg-white w-1/3 p-4 rounded shadow-md z-999">
+                                <h2 className="text-xl font-semibold mb-4">Confirm Deletion</h2>
+                                <p className="mb-4">Are you sure you want to delete this movies?</p>
+                                <div className="flex justify-end">
+                                    <button
+                                        onClick={handleCancelDelete}
+                                        className="px-4 py-2 text-gray-500 hover:text-gray-700"
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button
+                                        onClick={handleConfirmDelete}
+                                        className="px-4 py-2 bg-red-500 text-white ml-2 rounded hover:bg-red-700"
+                                    >
+                                        Confirm
+                                    </button>
                                 </div>
-                        </div>
-                    </>
-
+                            </div>
+                    </div>
                 )}
                 </div>
                 {/* Content Container End */}
@@ -275,27 +262,22 @@ function Admin_Movie() {
             {/* Pagination Start */}
             <div>
                 <div className='flex justify-center gap-5'>
-                    <div className=' flex gap-x-4 justify-center my-5'>
+                    <div className=' flex gap-x-4 justify-center mt-5'>
                         {
                             page == 1 ?  <button disabled className="btn btn-sm btn-outline btn-primary border border-white w-24 bg-white shadow-lg">Previous</button>:<button onClick={() => setPage(meta.prev)} className="btn btn-sm text-primary hover:bg-primary hover:text-white  border border-white w-24 bg-white shadow-lg">Previous</button>
                         }
                         <button className="btn btn-sm btn-outline bg-primary border border-white w-24 text-white" >{page}</button>
                         
                         {
-                            Math.ceil((meta.total/5)) == page || Math.ceil((meta.total/5)) == 0 ? <button disabled className="btn btn-sm btn-outline btn-primary border border-white w-24 bg-white shadow-lg">Next</button> : <button onClick={() => setPage(meta.next)} className="btn btn-sm text-primary hover:bg-primary hover:text-white  border-white w-24 bg-white shadow-lg">Next</button>
+                            Math.ceil((meta.total/3)) == page || Math.ceil((meta.total/12)) == 0 ? <button disabled className="btn btn-sm btn-outline btn-primary border border-white w-24 bg-white shadow-lg">Next</button> : <button onClick={() => setPage(meta.next)} className="btn btn-sm text-primary hover:bg-primary hover:text-white  border-white w-24 bg-white shadow-lg">Next</button>
                         }
                     </div>
-                        {/* <div className='btn w-12 h-10 rounded-full font-bold text-slate-400'>1</div>
-                        <div className='btn w-12 h-10 rounded-full font-bold text-slate-400'>2</div>
-                        <div className='btn w-12 h-10 rounded-full font-bold text-slate-400'>3</div>
-                        <div className='btn w-12 h-10 rounded-full font-bold text-slate-400'>4</div> */}
                 </div>
             </div>
             {/* Pagination End */}
             {/* Container Movie End */}
         </div>
         {/* Dashoboard Admin Movie End */}
-        <Footer></Footer>
         </>
     )
 

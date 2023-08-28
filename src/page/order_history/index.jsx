@@ -6,7 +6,6 @@ import { logout } from '../../store/reducer/user'
 import { useSelector, useDispatch } from 'react-redux'
 import useApi from "../../helper/useApi";
 import Cards_order from "../../component/cardsOrder";
-import loyalty from "../../assets/loyalty.png"
 import Points_Banner from '../../assets/points_banner.png'
 
 
@@ -14,8 +13,6 @@ import Points_Banner from '../../assets/points_banner.png'
 function Order_history() {
     const api = useApi();
     const [order, setOrder] = useState([]);
-    const [page, setPage]= useState(1)
-    const [meta, setMeta]= useState([])
     const {isAuth, data} = useSelector((s) => s.users)
     const navigate = useNavigate()
     const dispatch = useDispatch()
@@ -46,12 +43,17 @@ function Order_history() {
     }
 
 
+    useEffect(() => {
+        document.title = 'Order History - Tickitz';
+    });
+
+
 
     return(
         <>
         <Header />
-        <div className="bg-gray-200 w-full h-full flex items-center justify-center py-5">
-            <div className="flex flex-col lg:flex-row w-9/12">
+        <div className="bg-gray-100 w-full h-full flex items-center justify-center py-5">
+            <div className="flex flex-col lg:flex-row lg:mt-10 w-full max-w-7xl lg:px-6 ">
                 <section>
                     <div className="block mt-5 w-full bg-white rounded-lg lg:hidden">
                         <div className="flex justify-around pt-3 tracking-wider mx-auto max-w-lg">
@@ -71,7 +73,7 @@ function Order_history() {
                     </div>
 
                 </section>
-                <section className="hidden w-[50%] lg:block mr-10 ">
+                <section className="hidden w-full max-w-[320px] lg:block mr-10 ">
                     <div className="block bg-white p-10 rounded-t-lg ">
                         <p className="text-sm">INFO</p>
                         <div className="flex flex-col items-center mt-6 tracking-wider">
