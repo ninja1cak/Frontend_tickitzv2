@@ -1,70 +1,122 @@
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<div align='center' style="text-align: center;">
 
-## Available Scripts
+<h1 style="border:0;margin:1rem">Tickitz</h1>
 
-In the project directory, you can run:
+Front End for Tickitz
 
-### `npm start`
+<hr>
+<br>
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+</div>
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Table of Contents
 
-### `npm test`
+- [Table of Contents](#table-of-contents)
+- [Overview](#overview)
+- [Technologies Used](#technologies-used)
+- [Features](#features)
+- [Getting Started](#getting-started)
+  - [Installation](#installation)
+- [Project ScreenShoot](#project-screenshots)
+- [Resources](#resources)
+- [Contributors](#contributors)
+- [Related Project](#related-project)
+- [License](#license)
+- [Suggestion](#suggestion)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `npm run build`
+## Overview
+Tickitz is a cinema booking web application that was developed on ReactJs and Gin Gonic. Tickitz supports movies management such as create, update, delete, etc. Tickitz also supports user controls such as login, register, and update profiles.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Technologies Used
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- [ReactJS](https://legacy.reactjs.org/docs/getting-started.html)
+- [Redux](https://redux-toolkit.js.org)
+- [Tailwind](https://tailwindcss.com/)
+- etc.
 
-### `npm run eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Features
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- Login
+- Register
+- Update Profile
+- Update Password
+- Create Movie
+- Delete Movie
+- Update Movie
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## Getting Started
 
-## Learn More
+### Installation
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Clone the repository
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```bash
+  git clone https://github.com/JulianMindria/Frontend_tickitzv2.git
+```
 
-### Code Splitting
+Enter the repository
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+```bash
+  cd zwallet-react
+```
 
-### Analyzing the Bundle Size
+Install dependencies
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+```bash
+  npm install
+  or
+  yarn install
+```
 
-### Making a Progressive Web App
+Create .env file
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+```bash
+  npm i dotenv
+  or
+  add .env file
+```
 
-### Advanced Configuration
+Add .env to the required file
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+```bash
+  require('dotenv')
+```
 
-### Deployment
+Start the app
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+```bash
+  npm start
+```
 
-### `npm run build` fails to minify
+    
+## Screenshots
+![App Screenshot](https://github.com/Ravictation/zwallet-react/blob/development/src/assets/sc1.png?raw=true)
+![App Screenshot](https://github.com/Ravictation/zwallet-react/blob/development/src/assets/sc2.png?raw=true)
+![App Screenshot](https://github.com/Ravictation/zwallet-react/blob/development/src/assets/sc3.png?raw=true)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+## Resources
+
+Special thanks to:
+
+- [Vercel](https://vercel.com) - deploying code
+
+
+## Related
+
+[Tickitz Backend](https://github.com/ninja1cak/tickitz-be-golang/tree/master)
+
+
+## License
+
+This project is licensed under the ISC License
+
+
+## Suggestion
+
+If you find bugs / find better ways / suggestions you can pull request.
