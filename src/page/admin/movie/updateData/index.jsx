@@ -64,16 +64,16 @@ function Admin_Movie_update(){
     }
 
     const formattedDuration = () => {
-        const hour = parseInt(values.duration_hour) || 0;
-        const minute = parseInt(values.duration_minute) || 0;
+        // const hour = parseInt(values.duration_hour) || 0;
+        // const minute = parseInt(values.duration_minute) || 0;
     
-        if (hour === 0) {
-          return `${minute} Minute`;
-        } else if (minute === 0) {
-          return `${hour} Hour`;
-        } else {
-          return `${hour} Hour ${minute} Minute`;
-        }
+        // if (hour === 0) {
+        //   return `${minute} Minute`;
+        // } else if (minute === 0) {
+        //   return `${hour} Hour`;
+        // } else {
+        //   return `${hour} Hour ${minute} Minute`;
+        // }
       };
 
     return(

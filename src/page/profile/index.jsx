@@ -1,46 +1,40 @@
 import React, {useState, useEffect} from 'react'
-import { SliderComponent } from '@syncfusion/ej2-react-inputs';
 import { useNavigate } from 'react-router-dom'
 import Header from '../../component/header'
 import Footer from '../../component/footer'
+import eyeOpen from '../../assets/eye-open.png'
+import eyeClosed from '../../assets/eye-closed.png'
+import Points_Banner from '../../assets/points_banner.png'
+import PP from '../../assets/dummy-user-removebg-preview.png'
 import { logout } from '../../store/reducer/user'
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { addData } from '../../store/reducer/user'
 import useApi, {useApiMulti} from '../../helper/useApi'
-import { useSelector } from 'react-redux'
+import { Show } from '../../helper/toast'
 
 function Profile() {
-    
-    // const [first_name, setFirstName] = useState('')
-    // const [last_name, setLastName] = useState('')
-    // const [password_user, setPassword] = useState('')
-    // const [confirPassword, setConfirmPassword] = useState('')
-    // const [phone_number, setPhoneNumber] = useState('')
-    // const [email_user, setEmail] = useState('')
-    
-    // const [user, setUser] = useState([])
-    // const [status,setStatus] = useState([])
-    // const navigate = useNavigate()
-    // const dispatch = useDispatch()
-    // const api = useApi()
-    // // const apiMulti = useApiMulti()
-    // const {isAuth} = useSelector((s) => s.user)
+    const [user, setUser] = useState([])
+    const [status,setStatus] = useState([])
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
+    const api = useApi()
+    const [form, setForm] = useState({})
+    // const apiMulti = useApiMulti()
+    const {isAuth} = useSelector((s) => s.users)
+    const [toggle, setToggle] = useState(false)
 
-    // const getUserData = async () =>{
-        
-    //     try {
-    //         // const {data} = await axios.get(`${process.env.REACT_APP_API_URL}/user/`)    
-    //         const {data} = await api({
-    //             url: '/user'
-    //         })
-    //         setUser(data.data[0])
-            
-    //     } catch (error) {
-    //         console.log(error)
-    //     }
-    // }
+    const getUser = async () => {
+        try {
+          const {data} = await api('/user/profile')
+          console.log(data)
+        //   dispatch(addData(data))
+        setUser(data.data[0])
+        } catch (error) {
+          console.log(error)
+        }
+      }
 
-    // const updateUserData = async (e) =>{
-        
+    // const updateUserData = async (e) =>{  
     //     try {
             
     //         e.preventDefault()
@@ -51,7 +45,7 @@ function Profile() {
     //         formData.append('last_name', last_name)
     //         formData.append('phone_number', `+62${phone_number}`)
     //         formData.append('email_user', email_user)
-    //         // const {data} = await axios.put(`${process.env.REACT_APP_API_URL}/user`, formData)
+    //         const {data} = await api('/user')
     //         // const {data} = await apiMulti({
     //         //     url:'/user',
     //         //     method: 'PUT',
@@ -64,6 +58,34 @@ function Profile() {
     //         setStatus(404)
     //     }
     // }
+
+    const inputChange = (e) => {
+        const data = { ...form }
+        data[e.target.name] = e.target.value
+        setForm(data)
+    }
+
+    const updateUserData = () => {
+        api({
+            method: 'PATCH',
+            url: '/user',
+            data: form
+        })
+            .then(({ data }) => {
+                Show('Data has been changed', 'success')
+                setTimeout(() => {
+                    navigate('/signin')
+                }, 3050)
+            })
+            .catch((err) => {
+                const axiosErr = err.response.data
+                if (axiosErr.message !== undefined) {
+                    Show(axiosErr.message, 'warning')
+                } else if (axiosErr.error !== undefined) {
+                    Show(axiosErr.error, 'error')
+                }
+            })
+    }
 
     // const updatePassword = async (e) =>{
     //     try {
@@ -90,18 +112,21 @@ function Profile() {
     //     }
     // }
 
-    // const goLogout = () => {
-    //     dispatch(logout())
-    //     navigate('/login')
-    // }
-    
+    const goLogout = () => {
+        dispatch(logout())
+        navigate('/login')
+    }
 
-    // useEffect(() =>{
-    //     if(!isAuth){
-    //         navigate('/')
-    //     }
-    //     getUserData()
-    // }, [])
+    const handleToggle = () => {
+        setToggle(!toggle)
+    }
+
+    useEffect(() =>{
+        if(!isAuth){
+            navigate('/')
+        }
+        getUser()
+    }, [])
 
     return (
     <>
@@ -131,11 +156,10 @@ function Profile() {
                 <p>INFO</p>
                 <div className="flex flex-col items-center mt-6 tracking-wider">
                 <img
-                    className="mx-auto rounded-full h-36"
-                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                    className="object-cover mx-auto rounded-full h-36 w-36"
+                    src={user.url_photo_user == null ? PP : user.url_photo_user}
                 />
-                <p className="font-medium text-lg mt-4 mb-2">test_satu</p>
-                {/* <p className="font-medium text-lg mt-4 mb-2">{user.first_name + ' ' + user.last_name }</p> */}
+                <p className="font-medium text-lg mt-4 mb-2">{user.first_name + ' ' + user.last_name }</p>
                 <p className="text-sm text-gray-600 ">Moviegoers</p>
                 </div>
             </div>
@@ -143,18 +167,20 @@ function Profile() {
                 {/* <button className="block bg-primary h-11 w-40 text-white tracking-wider text-sm mx-auto rounded-lg hover:opacity-50 active:opacity-100 active:bg-white active:text-primary border active:border-primary">
                 Logout
                 </button> */}
-                <div>
-                    <span>Loyalty Points</span>
-                    <div>
-                        <img src="" alt="" />
-                        <div>
-                            <span>Movigoers</span>
-                            <span>320</span>
-                            <span>points</span>
+                <div className='px-10 pt-4'>
+                    <span className='font-medium text-slate-500'>Loyalty Points</span>
+                    <div className='relative my-6'>
+                        <img className='h-32 rounded-xl' src={Points_Banner} alt="point_banner" />
+                        <div className='absolute top-0 flex flex-col px-6 pt-5'>
+                            <span className='text-white font-bold text-xl'>Movigoers</span>
+                            <div className='pt-8'>
+                                <span className='text-white text-2xl font-medium'>320</span>
+                                <span className='pl-2 text-white'>points</span>
+                            </div>
                         </div>
                     </div>
-                    <span>180 points become a master</span>
-                    <SliderComponent id='slider' value={30} />
+                    <span className='text-lg text-slate-500'>180 points become a master</span>
+                    <input type="range" min={0} max="100" value="50" className="range range-sm range-primary" disabled/> 
                 </div>
             </div>
             </section>
@@ -186,7 +212,7 @@ function Profile() {
                     src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                     />
                     <p className="font-medium text-lg mt-4 mb-2">test_satu</p>
-                    {/* <p className="font-medium text-lg mt-4 mb-2">{`${user.first_name} ${user.last_name}`}</p> */}
+                    <p className="font-medium text-lg mt-4 mb-2">{`${user.first_name} ${user.last_name}`}</p>
                     <p className="text-sm text-gray-600 ">Moviegoers</p>
                 </div>
                 </div>
@@ -207,55 +233,40 @@ function Profile() {
                     </p>
                     <form className="tracking-wider lg:flex lg:flex-wrap lg:gap-x-10 " method='POST' encType="multipart/form-data" >
                     <div className="mb-6 lg:w-[100%] lg:max-w-[250px] xl:w-[100%] xl:max-w-[350px]">
-                        {/* <label className="block mb-3 lg:hidden">Full Name</label> */}
+                        <label className="block mb-3 lg:hidden">Full Name</label>
                         <label className="block mb-3 lg:block ">First Name</label>
+                        
                         <input
                         className="pl-6 block border border-gray-300 w-full h-10 rounded-lg  bg-gray-50"
                         type="text"
-                        placeholder="test"
-                        value=""
-                        />
-                        {/* <input
-                        className="pl-6 block border border-gray-300 w-full h-10 rounded-lg  bg-gray-50"
-                        type="text"
                         placeholder={user.first_name}
-                        value={first_name}
-                        onChange={e => setFirstName(e.target.value)}
-                        /> */}
+                        value={form.first_name}
+                        onChange={inputChange}
+                        />
+                        {/* {e => setFirstName(e.target.value)} */}
                     </div>
                     <div className="block mb-6 lg:mb-0 lg:block lg:w-[100%] lg:max-w-[250px] xl:w-[100%] xl:max-w-[350px]">
                         <label className="block mb-3 ">Last Name</label>
                         <input
                         className="pl-6 block border border-gray-300 w-full h-10 rounded-lg bg-gray-50 "
                         type="text"
-                        placeholder="satu"
-                        value="satu"
-
-                        />
-                        {/* <input
-                        className="pl-6 block border border-gray-300 w-full h-10 rounded-lg bg-gray-50 "
-                        type="text"
                         placeholder={user.last_name}
-                        value={last_name}
-                        onChange={e => setLastName(e.target.value)}
-
-                        /> */}
+                        value={form.last_name}
+                        onChange={inputChange}
+// {e => setLastName(e.target.value)}
+                        />
                     </div>
                     <div className="mb-6 lg:w-[100%] lg:max-w-[250px] xl:w-[100%] xl:max-w-[350px]">
                         <label className="block mb-3">E-mail</label>
+                        
                         <input
                         className="pl-6 block border border-gray-300 w-full h-10 rounded-lg bg-gray-50"
                         type="text"
-                        placeholder="satu@gmail.com"
-                        value="satu@gmail.com"
-                        />
-                        {/* <input
-                        className="pl-6 block border border-gray-300 w-full h-10 rounded-lg bg-gray-50"
-                        type="text"
                         placeholder={user.email_user}
-                        value={email_user}
-                        onChange={e => setEmail(e.target.value)}
-                        /> */}
+                        value={form.email_user}
+                        onChange={inputChange}
+                        // {e => setEmail(e.target.value)}
+                        />
                     </div>
                     <div className="mb-6  xl:w-[100%] xl:max-w-[350px]">
                         <label className="block mb-3">Phone Number</label>
@@ -264,20 +275,15 @@ function Profile() {
                             +62
                         </button>
                         <div className="border-r h-8" />
+                    
                         <input
-                            type="text"
-                            className="h-11 pl-5 w-full lg:w-[100%] lg:max-w-[300px] rounded-lg bg-gray-50"
-                            placeholder="6299"
-                            value="62822"
-                            
-                        />
-                        {/* <input
-                            type="text"
+                            type="number"
                             className="h-11 pl-5 w-full lg:w-[100%] lg:max-w-[300px] rounded-lg bg-gray-50"
                             placeholder={user.phone_number ? user.phone_number.slice(3):'update your phone number' }
-                            value={phone_number}
-                            onChange={e => setPhoneNumber(e.target.value)}
-                        /> */}
+                            value={form.phone_number}
+                            onChange={inputChange}
+                            // {e => setPhoneNumber(e.target.value)}
+                        />
                         </div>
                     </div>
 
@@ -285,26 +291,26 @@ function Profile() {
                 </div>
 
                 </div>
-                <button className="block mx-auto lg:mx-0 bg-primary text-white w-[80%] max-w-xl lg:max-w-xs p-2 my-10 rounded-lg wider hover:opacity-50 active:opacity-100 active:bg-gray-100 active:text-primary border active:border-primary">
+                <button className="block mx-auto lg:mx-0 bg-primary text-white w-[80%] max-w-xl lg:max-w-xs p-2 my-10 rounded-lg wider hover:opacity-50 active:opacity-100 active:bg-gray-100 active:text-primary border active:border-primary" onClick={updateUserData()}>
                     Update changes
                 </button>
                 <dialog id="my_modal_2" className="modal">
                 <form method="dialog" className="modal-box">
                     <h3 className="font-bold text-lg">Status</h3>
-                    {/* {
-                       status === undefined ? <p>Please wait for updating data</p> : status == 200 ? <p>Update data user success</p> : <p> add movie failed</p>
-
-                    } */}
-                    <div className="modal-action">
-                    <button className="btn" type='button'>Close</button>
-                    </div>
-                    {/* {
+                    {
                        status === undefined ? <p>Please wait for updating data</p> : status == 200 ? <p>Update data user success</p> : <p> add movie failed</p>
 
                     }
                     <div className="modal-action">
-                    <button className="btn" type='button' onClick={() =>  {email_user ? goLogout() : navigate(0)}}>Close</button>
-                    </div> */}
+                    <button className="btn" type='button'>Close</button>
+                    </div>
+                    {
+                       status === undefined ? <p>Please wait for updating data</p> : status == 200 ? <p>Update data user success</p> : <p> add movie failed</p>
+
+                    }
+                    <div className="modal-action">
+                    <button className="btn" type='button' onClick={() =>  {user.email_user ? goLogout() : navigate(0)}}>Close</button>
+                    </div>
                 </form>
                 </dialog>
             </section>
@@ -315,43 +321,39 @@ function Profile() {
                     Account and Privacy
                     </p>
                     <form className="tracking-wider lg:flex lg:gap-x-10 " method='POST' encType="multipart/form-data" >
-                    <div className="mb-6 lg:w-[100%] lg:max-w-[250px] xl:w-[100%] xl:max-w-[350px]">
+                    <div className="relative mb-6 lg:w-[100%] lg:max-w-[250px] xl:w-[100%] xl:max-w-[350px]">
                         <label className="block mb-3">New Password</label>
                         <input
                         className="px-6 block border border-gray-300 w-full h-10 rounded-lg bg-gray-50"
-                        type='password'
+                        type= {toggle == false ? 'password' : 'text'}
                         placeholder='Write your password'
-                        value="password"
-                        
-                        />
-                        {/* <input
-                        className="px-6 block border border-gray-300 w-full h-10 rounded-lg bg-gray-50"
-                        type='password'
-                        placeholder='Write your password'
-                        value={password_user}
-                        onChange={e => setPassword(e.target.value)}
-                        /> */}
-                    </div>
-                    <div className="mb-6 lg:w-[100%] lg:max-w-[250px] xl:w-[100%] xl:max-w-[350px]">
-                        <label className="block mb-3">Confirm</label>
-                        <input
-                        className="px-6 block border border-gray-300 w-full h-10 rounded-lg bg-gray-50"
-                        type="password"
-                        placeholder="Confirm your password"
-                        value=""
-                        
-                        />
-                        
-                        {/* <input
-                        className="px-6 block border border-gray-300 w-full h-10 rounded-lg bg-gray-50"
-                        type="password"
-                        placeholder="Confirm your password"
-                        value={confirPassword}
-                        onChange={e => setConfirmPassword(e.target.value)}
+                        value={form.password_user}
+                        onChange={inputChange}
+                        // {e => setPassword(e.target.value)}
                         />
                         {
-                            !confirPassword ? '' : confirPassword !== password_user ? <p> Password not same, input again</p> : ''
-                        } */}
+                            (toggle === false) ? <img className='cursor-pointer absolute top-12 right-4 w-6 text-slate-500' src={eyeClosed} alt="eye-closed" onClick={handleToggle}/>
+                            : <img className='cursor-pointer absolute top-12 right-4 w-5 text-slate-500' src={eyeOpen} alt="eye-closed" onClick={handleToggle}/>
+                        }
+                    </div>
+                    <div className="relative mb-6 lg:w-[100%] lg:max-w-[250px] xl:w-[100%] xl:max-w-[350px]">
+                        <label className="block mb-3">Confirm</label>
+                        
+                        <input
+                        className="px-6 block border border-gray-300 w-full h-10 rounded-lg bg-gray-50"
+                        type= {toggle == false ? 'password' : 'text'}
+                        placeholder="Confirm your password"
+                        value={form.confirPassword}
+                        onChange={inputChange}
+                        // {e => setConfirmPassword(e.target.value)}
+                        />
+                        {
+                            !user.confirPassword ? '' : user.confirPassword !== user.password_user ? <p> Password not same, input again</p> : ''
+                        }
+                        {
+                            (toggle === false) ? <img className='cursor-pointer absolute top-12 right-4 w-6 text-slate-500' src={eyeClosed} alt="eye-closed" onClick={handleToggle}/>
+                            : <img className='cursor-pointer absolute top-12 right-4 w-5 text-slate-500' src={eyeOpen} alt="eye-closed" onClick={handleToggle}/>
+                        }
                     </div>
                     </form>
                 </div>
@@ -361,20 +363,20 @@ function Profile() {
                 <dialog id="my_modal_1" className="modal">
                 <form method="dialog" className="modal-box">
                     <h3 className="font-bold text-lg">Status</h3>
-                    {/* {
-                       status === undefined ? <p>Please wait for updating data</p> : status == 400 ? <p>PASSWORD NOT SAME, INPUT AGAIN</p> : status == 200 && password_user ? <p>Update password success</p> : <p> update password failed</p>
+                    {
+                       status === undefined ? <p>Please wait for updating data</p> : status == 400 ? <p>PASSWORD NOT SAME, INPUT AGAIN</p> : status == 200 && user.password_user ? <p>Update password success</p> : <p> update password failed</p>
 
-                    } */}
+                    }
                     <div className="modal-action">
                     <button className="btn" type='button' >Close</button>
                     </div>
-                    {/* {
-                       status === undefined ? <p>Please wait for updating data</p> : status == 400 ? <p>PASSWORD NOT SAME, INPUT AGAIN</p> : status == 200 && password_user ? <p>Update password success</p> : <p> update password failed</p>
+                    {
+                       status === undefined ? <p>Please wait for updating data</p> : status == 400 ? <p>PASSWORD NOT SAME, INPUT AGAIN</p> : status == 200 && user.password_user ? <p>Update password success</p> : <p> update password failed</p>
 
                     }
                     <div className="modal-action">
                     <button className="btn" type='button' onClick={() => navigate(0)}>Close</button>
-                    </div> */}
+                    </div>
                 </form>
                 </dialog>
                 </div>
