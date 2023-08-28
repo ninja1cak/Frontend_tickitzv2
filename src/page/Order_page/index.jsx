@@ -37,6 +37,8 @@ function Order_page() {
         arr.push(v.value)
     })
 
+    console.log(value)
+
     const changemovie = () => {
         Dispatch(addDataBooking({}))
         Dispatch(addDataCheckout({}))
@@ -45,6 +47,8 @@ function Order_page() {
     const handleCheckout = () => {
         Dispatch(addDataCheckout(arr))
     }
+
+    let array_genre = (dataBooking.genre).split(", ")
     
   return (
     <>
@@ -80,8 +84,9 @@ function Order_page() {
                                     <div className=''>
                                         <h1 className='font-bold text-lg m-2'>{dataBooking.title_movie}</h1>
                                         <div className='sm:flex hidden md:flex-row flex-col gap-y-2 gap-x-2 mt-5'>
-                                            <h2 className='w-32 text-base bg-gray-100 border text-center rounded-full'>Action</h2>
-                                            <h2 className='w-32 text-base bg-gray-100 border text-center rounded-full'>Adventure</h2>
+                                            {array_genre.map((v)=>{
+                                                return <h2 className='w-32 text-base bg-gray-100 border text-center rounded-full'>{v}</h2>
+                                            })}
                                         </div>
                                         <h2 className='sm:flex hidden mt-5'>Regular - {dataBooking.time}</h2>
                                     </div>
@@ -99,36 +104,40 @@ function Order_page() {
                                 </div>
                             </div>
                         </div>
-                        <div className="p-5 bg-white w-11/12 mx-auto col-start-3 col-end-4 rounded-lg">
+                        <div className="p-5 bg-white w-full mx-auto col-start-3 col-end-4 rounded-lg">
                             <div className='text-center mt-8'>
                                 <img className='mx-auto w-36 h-auto' src={dataBooking.cinema_logo_url} alt="" />
                                 <h1 className='mt-4 text-2xl font-semibold'>{dataBooking.cinema_name} Cinema</h1>
                             </div>
-                            <div className='flex justify-center gap-x-4 mt-5'>
+                            <div className='flex xl:justify-between justify-center gap-x-10 mt-5'>
                                 <div className='flex flex-col gap-y-4 text-gray-600'>
                                     <h2>Movie selected</h2>
                                     <h2>Date and Time</h2>
                                     <h2>One ticket price</h2>
-                                    <h2>Seat choosed</h2>
+                                    
                                 </div>
                                 <div className='flex flex-col gap-y-4 font-medium'>
                                     <h2>{dataBooking.title_movie}</h2>
                                     <h2>{dataBooking.time_playing} at {dataBooking.time}</h2>
-                                    <h2>${dataBooking.price_seat}</h2>
-                                    <Select
-                                        multi
-                                        options={options}
-                                        onChange={selected_seat}
-                                    />
+                                    <h2>${dataBooking.price_seat}</h2>                                
                                 </div>
                             </div>
+                            <div className='items-center flex xl:justify-start justify-center xl:gap-x-12 gap-x-28 mt-4'>
+                                        <h2 className='text-gray-600 font-bold'>Choose Seat</h2>
+                                        <Select
+                                            multi
+                                            className="rounded-lg border mr-16 self-start border-gray-200 px-5"
+                                            options={options}
+                                            onChange={selected_seat}
+                                        />
+                                    </div>
                             <hr className='mt-10' />
                             <div className='flex justify-between mt-10 mb-10'>
                                 <h2 className='text-xl font-medium'>Total Payment</h2>
                                 <h2 className='text-xl font-bold text-primary'>${arr.length*10}</h2>
                             </div>
                         </div>
-                        <Link onClick={handleCheckout} className=" border h-16 w-11/12 mt-6 bg-primary mx-auto items-center flex justify-center text-white rounded-md hover:bg-white hover:text-primary" to='/payment_info'>Checkout Now</Link>
+                        <Link onClick={handleCheckout} className={(arr.length===0 ? "border h-16 w-full mt-6 bg-white mx-auto items-center flex justify-center text-gray-400 rounded-md":"border h-16 w-11/12 mt-6 bg-primary mx-auto items-center flex justify-center text-white rounded-md hover:bg-white hover:text-primary")} to={(arr.length===0 ? '' : '/payment_info')}>Checkout Now</Link>
                     </div>
                 </div>
             </div>

@@ -13,7 +13,7 @@ import paypal from '../../assets/New - Payment/logos_paypal.svg'
 import vector from '../../assets/New - Payment/Vector.svg'
 import visa from '../../assets/New - Payment/logos_visa.svg'
 
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { Show, Container } from '../../helper/toast'
 import useApi from '../../helper/useApi'
@@ -22,6 +22,7 @@ function Payment_page() {
     const [payment, setPayment] = useState()
     const {dataBooking, dataCheckout, data} = useSelector((s)=>s.users)
     const api = useApi()
+    const navigate = useNavigate()
 
     const date = new Date(dataBooking.time_playing);
     
@@ -33,12 +34,13 @@ function Payment_page() {
 
     const PostBooking = () => {
         const formData = new FormData();
-        formData.append('seats_booking', dataCheckout.length)
-        formData.append('total_price_booking', dataCheckout.length*10);
+        formData.append('seats_booking', dataCheckout.join(", "))
+        formData.append('total_prices_booking', dataCheckout.length*dataBooking.price_seat);
         formData.append('watch_date', dataBooking.time_playing);
         formData.append('payment_method', payment);
-        formData.append('user_id', data.data[0].id_user);
         formData.append('watch_time', dataBooking.time);
+        formData.append('id_schedule', dataBooking.id_schedule);
+        formData.append('cinema_name', dataBooking.cinema_name);
 
         api({
             method: 'POST',
@@ -48,7 +50,10 @@ function Payment_page() {
                 'Content-Type': 'multipart/form-data'
             }
         }).then(res=>{
-            Show('Registration Success', 'success')
+            Show('Booking Success', 'success')
+          setTimeout(() => {
+            navigate('/check_payment')
+          }, 3000);
         }).catch(err=>{
             const axiosErr = err.response.data
             if (axiosErr.message !== undefined) {
@@ -162,7 +167,7 @@ function Payment_page() {
                                 <img className='w-32 h-auto mx-auto' src={Payment} alt="" />
                             </button> */}
                         </div>
-                        <dialog id="my_modal_1" className="modal">
+                        <dialog id="my_modal_1" className="modal z-50">
                         <form method="dialog" className="modal-box">
                             <h3 className="font-bold text-2xl text-center">Payment Info</h3>
                             <div className='flex justify-between'>
@@ -174,10 +179,10 @@ function Payment_page() {
                             </div>
                             <div className='flex justify-between mt-10'>
                                 <h3 className='text-gray-400 text-lg font-bold'>Total Payment</h3>
-                                <h3 className='text-lg font-medium text-primary'>${dataCheckout.length*10}</h3>
+                                <h3 className='text-lg font-medium text-primary'>${dataCheckout.length*dataBooking.price_seat}</h3>
                             </div>
                             <p className='text-gray-400 mt-6'>Pay this payment bill before it is due, on <span className='text-rose-600'>{moment(date).add(2, 'day').format('DD MMMM YYYY')}.</span> If the bill has not been paid by the specified time, it will be forfeited  </p>
-                            <Link onClick={PostBooking} className="mt-10 border h-14 w-full hover:border-4 border-gray-100 hover:font-black bg-primary mx-auto items-center flex justify-center text-white rounded-lg hover:bg-white hover:text-primary" to='/check_payment'>PAY</Link>
+                            <Link onClick={PostBooking} className="mt-10 border h-14 w-full hover:border-4 border-gray-100 hover:font-black bg-primary mx-auto items-center flex justify-center text-white rounded-lg hover:bg-white hover:text-primary">PAY</Link>
                             <div className="modal-action flex-flex-col">
                                 <button className="btn border hover:border-4 hover:border-gray-100 border-primary h-14 w-full hover:font-black bg-white text-primary mx-auto items-center flex justify-center rounded-lg hover:bg-primary hover:text-white">Pay Later</button>
                             </div>
@@ -185,7 +190,7 @@ function Payment_page() {
                         </dialog>
                         {/* <Link  to='/payment_info'>Pay Your Order</Link> */}
                     </div>
-                    <button className="btn text-lg font-bold border w-full h-16 mt-6 bg-primary mx-auto items-center flex justify-center text-white rounded-md hover:bg-white hover:text-primary" onClick={()=>window.my_modal_1.showModal()}>Pay Your Order</button>
+                    {(!payment ? <button className="btn text-lg font-bold border w-full h-16 mt-6 bg-white mx-auto items-center flex justify-center text-gray-600 rounded-md">Select Payment Method</button>:<button className="btn text-lg font-bold border w-full h-16 mt-6 bg-primary mx-auto items-center flex justify-center text-white rounded-md hover:bg-white hover:text-primary" onClick={()=>window.my_modal_1.showModal()}>Pay Your Order</button>)}
                 </div>
             </div>
                 </div>

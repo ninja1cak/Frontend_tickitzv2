@@ -8,7 +8,7 @@ function Show(msg, types) {
     })
 }
 function Container() {
-    return <ToastContainer position="bottom-right" autoClose={3000} hideProgressBar={false} pauseOnFocusLoss={false} theme="light" />
+    return <ToastContainer position="bottom-right" className="z-[9999]" autoClose={3000} hideProgressBar={false} pauseOnFocusLoss={false} theme="light" />
 }
 
 export { Container, Show }

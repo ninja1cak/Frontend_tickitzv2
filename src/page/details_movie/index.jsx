@@ -24,14 +24,13 @@ function Details_movie() {
     const [datas, setDatas] = useState({})
     const [filtertime, setFiltertime] = useState('')
     const [filterdate, setFilterdate] = useState('')
-    const [ft, setft] = useState('')
 
     // const [loc, setLoc] = useState('')
     const [filterloc, setFilterloc] = useState('')
-    
-    const [isi, cekIsi] = useState([])
+
     const [meta, setMeta]= useState([])
     const [page, setPage]= useState(1)
+    const [total, setTotal] = useState(0)
 
     const getMovie = async () => {
         try {
@@ -79,6 +78,17 @@ function Details_movie() {
         }
       }
 
+      const totalSchedule = async () => {
+        try {
+          const {data} = await api(`/schedule?id_movie=${params.id}`)
+          setTotal(data.meta)
+          
+        } catch (error) {
+          console.log(error)
+          setSchedule(null)
+        }
+      }
+
       function getDates (startDate, endDate) {
         const dates = []
         let currentDate = startDate
@@ -97,7 +107,7 @@ function Details_movie() {
     }
 
     const filterLocation = (v) =>{
-        if (v.target.value !== 'All'){
+        if (v.target.value !== 'e.g. Jakarta'){
           setFilterloc(v.target.value) 
         }
         else{
@@ -106,7 +116,7 @@ function Details_movie() {
       }
     
       const filterTimefunc = (v) =>{
-        if (v.target.value !== 'All'){
+        if (v.target.value !== 'e.g. 12.00 PM'){
             setFiltertime(v.target.value) 
         }
         else{
@@ -115,14 +125,13 @@ function Details_movie() {
     }
 
     const filterDate = (v) =>{
-        if (v.target.value !== 'All'){
+        if (v.target.value !== 'e.g. 02 February 2022'){
             setFilterdate(v.target.value) 
         }
         else{
             setFilterdate('')
         }
     }
-
 
       const check = (v) =>{
         console.log({
@@ -135,17 +144,13 @@ function Details_movie() {
             time_playing: filterdate,
             image_movie: movie.url_image_movie
         })
-        cekIsi(v.target.value)
       }
-    
-
 
     const submitt = () => {
         getSchedule()
         // setLoc(filterloc)
-        console.log(filterloc, filtertime)
-    }
 
+    }
     
     const handleBook = () => {
         Dispatch(addDataBooking(datas))
@@ -157,20 +162,19 @@ function Details_movie() {
     //     console.log("data not found")
     //   }
 
-  
-
     useEffect(()=>{
         getMovie()
         getTime()
         getCity()
         getSchedule()
+        totalSchedule()
         setFilterdate(date[0])
     }, [])
 
     useEffect(()=>{
         getSchedule()
         // console.log(isi)
-    }, [isi, page])
+    }, [page])
 
 
   return (
@@ -235,11 +239,12 @@ function Details_movie() {
                 </div>
             </section>
             <section className=''>
-                <h2 className='mt-16 text-2xl font-bold'>Book Tickets</h2>
-                <div className='flex md:flex-row flex-col gap-y-8 justify-between mx-auto items-center px-2 mt-10'>
+                <h2 className='mt-16 text-2xl font-bold'>{(!schedule ? "The Movie You Are Looking For Is Not Aired Yet...":"Book Tickets")}</h2>
+                <div className={(!schedule ? "hidden":'flex md:flex-row flex-col gap-y-8 justify-between mx-auto items-center px-2 mt-10')}>
                     <div className="flex flex-col gap-y-2 md:w-1/4 w-full">
                         <h3 className='mx-auto'>Choose Date</h3>
-                        <select onChange={filterDate} className="select select-bordered mx-auto w-full h-12 max-w-xs bg-gray-100">
+                        <select onChange={filterDate} className="select select-bordered mx-auto w-full text-gray-400 h-12 max-w-xs bg-gray-100">
+                            <option>e.g. 02 February 2022</option>
                             {
                                 date != null ? date.map((v) => {
                                     return <option>{v}</option>
@@ -251,8 +256,8 @@ function Details_movie() {
                     </div>
                     <div className="flex flex flex-col gap-y-2 md:w-1/4 w-full">
                         <h3 className='mx-auto'>Choose  Time</h3>
-                        <select onChange={filterTimefunc} className="select select-bordered mx-auto w-full h-12 max-w-xs bg-gray-100">
-                            <option>All</option>
+                        <select onChange={filterTimefunc} className="select select-bordered text-gray-400 mx-auto w-full h-12 max-w-xs bg-gray-100">
+                            <option>e.g. 12.00 PM</option>
                         {
                                 times != null ? times.map((data) => {
                                 return <option>{data.time}</option>
@@ -264,8 +269,8 @@ function Details_movie() {
                     </div>
                     <div className="flex flex flex-col gap-y-2 md:w-1/4 w-full ">
                         <h3 className='mx-auto'>Choose  Location</h3>
-                        <select onChange={filterLocation} className="select select-bordered mx-auto w-full h-12 max-w-xs bg-gray-100">
-                            <option>All</option>
+                        <select onChange={filterLocation} className="select select-bordered text-gray-400 mx-auto w-full h-12 max-w-xs bg-gray-100">
+                            <option>e.g. Jakarta</option>
                             {
                                 city != null ? city.map((data) => {
                                 return <option>{data.city}</option>
@@ -276,15 +281,18 @@ function Details_movie() {
                         </select>
                     </div>
                     <div> 
-                        <div className="flex flex flex-col gap-y-4 w-1/4 mt-10">
+                        <div className="flex flex flex-col gap-y-4 w-1/4">
+                            <hr />
+                            <hr />
                             <button onClick={submitt} className="border h-12 object-bottom w-40 bg-primary mx-auto items-center flex justify-center text-white rounded-lg hover:bg-white hover:text-primary ">Filter</button>
                         </div>
                     </div>
                 </div>
             </section>
-            <section className='relative flex flex-col gap-y-10 mt-10'>
-                <div className='flex gap-x-10'>
-                    <h2 className='text-lg font-bold'>Choose Cinema </h2>
+            {/* <span className={(error_message != '' ? 'text-red-400' : phone == '' ? 'text-[#A9A9A9]' : 'text-[#6379F4]') + " flex gap-x-2 absolute mt-5 ml-2 items-center"}><BsTelephone /></span> */}
+            <section className={(total.total === meta.total ? 'hidden':'relative flex flex-col gap-y-10 mt-10')}>
+                <div className='flex gap-x-10 items-center'>
+                    <h2 className='text-md font-bold'>Choose Cinema </h2>
                     <h3 className='text-md text-gray-600'>{meta.total} Result</h3>
                 </div>
                 <div>
@@ -297,7 +305,7 @@ function Details_movie() {
                                 <p>Data not found</p>
                             } 
                     </div>
-                    <div className='flex justify-center gap-5'>
+                    <div className={(meta.total === 3 ? 'hidden':'flex justify-center gap-5')}>
                         <div className=' flex gap-x-4 justify-center mt-5'>
                         {
                             page == 1 ?  <button disabled className="btn btn-sm btn-outline btn-primary border border-white w-24 bg-white shadow-lg">Previous</button>:<button onClick={() => setPage(meta.prev)} className="btn btn-sm text-primary hover:bg-primary hover:text-white  border border-white w-24 bg-white shadow-lg">Previous</button>
@@ -314,7 +322,7 @@ function Details_movie() {
                         <div className='btn w-12 h-10 rounded-full font-bold text-slate-400'>4</div> */}
                     </div>
                 </div>
-                <Link to='/order_page' onClick={handleBook} className="h-16 object-bottom w-44 bg-primary mx-auto items-center flex justify-center text-white rounded-lg hover:bg-white hover:text-primary border">BOOK NOW</Link>
+                <Link to={(!filterdate || !filterloc || !filtertime || !datas.cinema_name ? '':'/order_page')} onClick={handleBook} className={(!filterdate || !filterloc || !filtertime || !datas.cinema_name ? "h-16 object-bottom w-44 bg-white mx-auto items-center flex justify-center text-gray-400 rounded-lg border":"h-16 object-bottom w-44 bg-primary mx-auto items-center flex justify-center text-white rounded-lg hover:bg-white hover:text-primary border")}>BOOK NOW</Link>
             </section>
 
         </div>
