@@ -2,6 +2,7 @@ import React, {useState, useEffect} from "react";
 import { Link, useNavigate } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import moment from 'moment'
 import Header from "../../../component/header";
 import useApi from "../../../helper/useApi";
 
@@ -17,23 +18,28 @@ function Admin_Movie() {
     
     const fetchMovies = async () => {
         try {
-            // const {data} = await api(`/movie?limit=12&page=${page}`)
             let url = `/movie?limit=5&page=${page}&id_movie`;
-        
+    
             if (selectedDate) {
                 const formattedDate = selectedDate.toISOString().split('T')[0];
                 url = `/movie?limit=5&page=${page}&release_date=${formattedDate}`;
             }
     
-            const {data} = await api(url);
-            if(data.meta === undefined){
-              data.meta = {
-                next : 0,
-                prev : 0,
-                meta : 0,
-              }
+            const { data } = await api(url);
+            if (data.meta === undefined) {
+                data.meta = {
+                    next: 0,
+                    prev: 0,
+                    meta: 0,
+                };
             }
-            setMovies(data.data)
+    
+            const moviesWithFormattedDates = data.data.map(movie => ({
+                ...movie,
+                release_date_movie: moment(movie.release_date_movie).format('DD MMMM YYYY'),
+            }));
+    
+            setMovies(moviesWithFormattedDates);
             setMeta(data.meta)
             
           } catch (error) {
@@ -100,7 +106,7 @@ function Admin_Movie() {
                         </Link>
                     </div>
                     <div>
-                        <div className="w-full" data-te-datepicker-init data-te-inline="true" data-te-input-wrapper-init>
+                        <div className="w-full flex justify-center my-5" data-te-datepicker-init data-te-inline="true" data-te-input-wrapper-init>
                             <DatePicker
                                 selected={selectedDate}
                                 onChange={handleDateChange}
