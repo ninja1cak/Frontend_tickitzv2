@@ -7,21 +7,25 @@ import { useSelector, useDispatch } from 'react-redux'
 import useApi from "../../helper/useApi";
 import Cards_order from "../../component/cardsOrder";
 import loyalty from "../../assets/loyalty.png"
+import Points_Banner from '../../assets/points_banner.png'
+
 
 
 function Order_history() {
     const api = useApi();
     const [order, setOrder] = useState([]);
+    const [page, setPage]= useState(1)
+    const [meta, setMeta]= useState([])
     const {isAuth, data} = useSelector((s) => s.users)
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
 
+
     const fetchData = async () => {
         try {
-            const response = await api.get(`/booking?page=1&limit=2`);
-            const { data } = response.data;
-            setOrder(data);
+            const { data } = await api.get(`/booking?page=1&limit=5`);
+              setOrder(data.data)
           } catch (error) {
             console.log(error);
           }
@@ -40,6 +44,7 @@ function Order_history() {
         dispatch(logout())
         navigate('/login')
     }
+
 
 
     return(
@@ -79,10 +84,24 @@ function Order_history() {
                         </div>
                     </div>
                     <div className="block border-t border-gray-300 bg-white py-6 rounded-b-lg">
-                        <img src={loyalty} alt="loyalty" className="p-5 my-5" />
-                        <button onClick={goLogout} className="block bg-primary h-11 w-40 text-white tracking-wider text-sm mx-auto rounded-lg hover:opacity-50 active:opacity-100 active:bg-white active:text-primary border active:border-primary">
+                        <div className='px-10 pt-4'>
+                            <span className='font-medium text-slate-500'>Loyalty Points</span>
+                            <div className='relative my-6'>
+                                <img className='h-32 rounded-xl' src={Points_Banner} alt="point_banner" />
+                                <div className='absolute top-0 flex flex-col px-6 pt-5'>
+                                    <span className='text-white font-bold text-xl'>Movigoers</span>
+                                    <div className='pt-8'>
+                                        <span className='text-white text-2xl font-medium'>320</span>
+                                        <span className='pl-2 text-white'>points</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <span className='text-lg text-slate-500'>180 points become a master</span>
+                            <input type="range" min={0} max="100" value="50" className="range range-sm range-primary" disabled/> 
+                        </div>
+                        {/* <button onClick={goLogout} className="block bg-primary h-11 w-40 text-white tracking-wider text-sm mx-auto rounded-lg hover:opacity-50 active:opacity-100 active:bg-white active:text-primary border active:border-primary">
                         Logout
-                        </button>
+                        </button> */}
                     </div>
                 </section>
                 <div className="lg:w-[100%]">
@@ -103,22 +122,24 @@ function Order_history() {
                                 </Link>
                             </div>
                         </div>
-                        { order ? (
-                            order.map((v) => {
-                                return (
-                                    <Cards_order
-                                    title_movie={v.title_movie}
-                                    image={v.cinema_logo_url}
-                                    time={v.watch_time}
-                                    seats={v.seats_booking}
-                                    date={v.watch_date}
-                                    total={v.totals_price_booking}   
-                                    />
-                                );
-                            })
-                            ) : (
-                                <h1 className="text-center">Data not found</h1>
-                        )}
+                        <div className="flex flex-col overflow-y-scroll">
+                            { order ? (
+                                order.map((v) => {
+                                    return (
+                                        <Cards_order
+                                        title_movie={v.title_movie}
+                                        image={v.cinema_logo_url}
+                                        time={v.watch_time}
+                                        seats={v.seats_booking}
+                                        date={v.watch_date}
+                                        total={v.totals_price_booking}   
+                                        />
+                                    );
+                                })
+                                ) : (
+                                    <h1 className="text-center">Data not found</h1>
+                            )}
+                        </div>
                     </section>
                     <section className="lg:hidden w-full">
                         <div className="block bg-white p-6 rounded-t-lg ">
@@ -133,8 +154,8 @@ function Order_history() {
                         </div>
                         </div>
                         <div className="block border-t border-gray-300 bg-white py-6 rounded-b-lg flex flex-col items-center justify-center">
-                        <img src={loyalty} alt="loyalty" className="w-[80%] md:w-[40%] p-5 my-5 flex items-center justify-center"/>
-                        <button className="block bg-primary h-11 w-40 text-white tracking-wider text-sm mx-auto rounded-lg">
+                        {/* <img src={loyalty} alt="loyalty" className="w-[80%] md:w-[40%] p-5 my-5 flex items-center justify-center"/> */}
+                        <button onClick={goLogout} className="block bg-primary h-11 w-40 text-white tracking-wider text-sm mx-auto rounded-lg">
                             Logout
                         </button>
                         </div>

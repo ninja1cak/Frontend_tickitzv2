@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import Header from '../../component/header'
 import Footer from '../../component/footer'
 import eyeOpen from '../../assets/eye-open.png'
@@ -136,18 +136,18 @@ function Profile() {
             <section>
             <div className="block mb-10  bg-white lg:hidden">
                 <div className="flex justify-around pt-3 tracking-wider mx-auto max-w-lg">
-                <a
-                    href="./profilpage.html"
+                <Link
+                    to="/profil"
                     className="border-b-4 border-primary pb-6 hover:opacity-60 hover:bg-gray-50 active:opacity-20"
                 >
                     Details Account
-                </a>
-                <a
-                    href="./orderhistory.html"
+                </Link>
+                <Link
+                    to="/order_history"
                     className="text-gray-300 hover:opacity-60 hover:bg-gray-50 active:opacity-20"
                 >
                     Order History
-                </a>
+                </Link>
                 </div>
             </div>
             </section>
@@ -188,18 +188,18 @@ function Profile() {
             <section>
                 <div className="hidden mb-10  bg-white lg:block pt-1 rounded-lg ">
                 <div className="flex justify-start pt-3 tracking-wider max-w-lg">
-                    <a
-                    href="./profilpage.html"
+                    <Link
+                    to="/profil"
                     className="border-b-4 border-primary pb-6 lg:mx-6 lg:mr-10 hover:opacity-60 hover:bg-gray-50 active:opacity-20"
                     >
                     Account Settings
-                    </a>
-                    <a
-                    href="./orderhistory.html"
+                    </Link>
+                    <Link
+                    to="/order_history"
                     className="text-gray-300 hover:opacity-60 hover:bg-gray-50 active:opacity-20"
                     >
                     Order History
-                    </a>
+                    </Link>
                 </div>
                 </div>
             </section>
