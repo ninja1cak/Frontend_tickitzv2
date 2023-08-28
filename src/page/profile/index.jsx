@@ -22,7 +22,8 @@ function Profil() {
     const dispatch = useDispatch()
     const api = useApi()
     // const apiMulti = useApiMulti()
-    const {isAuth} = useSelector((s) => s.user)
+    const {isAuth} = useSelector((s) => s.users)
+
 
     const getUserData = async () =>{
         

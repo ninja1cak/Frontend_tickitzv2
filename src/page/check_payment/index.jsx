@@ -10,69 +10,140 @@ import backg from '../../assets/logo cinema/Group 7.svg'
 import qr from '../../assets/logo cinema/QR Code 1.svg'
 import logo from '../../assets/tickitz 1.png'
 import { BsArrowRight } from 'react-icons/bs'
+import { useSelector, useDispatch } from 'react-redux'
+import { addDataCheckout, addDataBooking } from '../../store/reducer/user'
 
-function check_payment() {
+function Check_payment() {
+
+    const Dispatch = useDispatch()
+    const changemovie = () => {
+        Dispatch(addDataBooking({}))
+        Dispatch(addDataCheckout({}))
+    }
+    const {dataBooking, dataCheckout, data} = useSelector((s)=>s.users)
   return (
     <>
         <Header />
-        <div className='bg-gray-100'>
-            <div className="mx-auto">
-            <div className='absolute z-10 inset-y-0 left-44 top-1/2 flex flex-col gap-y-10'>
-                <img className='w-96 h-auto' src={logo} alt="" />
-                <h2 className='text-white text-7xl font-bold'>Thankyou For Purchasing</h2>
-                <h3 className='text-gray-400 text-3xl'>Lorem ipsum dolor sit amet consectetur. <br />Quam pretium pretium tempor integer sed magna et.</h3>
-                <h3 className='flex items-center gap-x-4 text-white text-2xl'>Please Download Your Ticket<BsArrowRight /></h3>
-            </div>
-                <div className='flex justify-between relative'>
-                    <img className='w-2/3' src={backg} alt="" />
-                    <div className='absolute inset-y-0 right-32 bottom-0 my-auto bg-white w-1/6 h-1/2 rounded-lg ml-92'>
-                        <img className='mx-auto relative top-24' src={qr} alt="" />
-                        <hr className='relative top-40' />
-                        <div className='relative flex justify-around top-56'>
-                            <div>
-                                <div className='flex flex-col gap-y-4'>
-                                    <h3 className='text-gray-400 text-base'>Movie</h3>
-                                    <h2 className='text-lg font-medium'>Spider-Man: ..</h2>
+        <div class="bg-gray-100">
+            <div class="xl:grid flex flex-col grid-cols-3 grid-flow-row grid-">
+                <div class="text-center bg-white col-start-1 col-end-3">
+                <section className="relative md:flex hidden flex-col">
+                    <img
+                        className="h-full w-full object-cover"
+                        src={backg}
+                        alt=""
+                    />
+                    <div className="absolute flex gap-y-6 flex-col w-full h-full justify-center text-left px-12 ">
+                        <img className="w-1/2" src={logo} alt="" />
+                        <h2 className='text-white text-7xl font-bold'>Thankyou For Purchasing</h2>
+                        <h3 className='text-gray-400 text-3xl'>Lorem ipsum dolor sit amet consectetur. <br />Quam pretium pretium tempor integer sed magna et.</h3>
+                        <h3 className='flex gap-x-4 text-white text-2xl'>Please Download Your Ticket<BsArrowRight /></h3>
+                    </div>
+                </section>
+                </div>
+                <div class="text-center self-center bg-gray-100 col-start-3 col-end-4">
+                    <div className='relative mx-auto mt-10 bg-white min-h-full w-96 rounded-lg'>
+                            <img className='mx-auto' src={qr} alt="" />
+                            <hr className='mt-10' />
+                            <div className=' flex justify-around'>
+                                <div className='flex flex-col gap-y-6 mt-10'>
+                                    <div className='flex flex-col gap-y-2'>
+                                        <h3 className='text-gray-400 text-base'>Movie</h3>
+                                        <h2 className='text-lg font-medium'>{(dataBooking.title_movie).slice(0,8)} ..</h2>
+                                    </div>
+                                    <div className='flex flex-col gap-y-2'>
+                                        <h3 className='text-gray-400 text-base'>Date</h3>
+                                        <h2 className='text-lg font-medium'>{(dataBooking.time_playing).slice(0,8)} ..</h2>
+                                    </div>
+                                    <div className='flex flex-col gap-y-2'>
+                                        <h3 className='text-gray-400 text-base'>Count</h3>
+                                        <h2 className='text-lg font-medium'>{dataCheckout.length} pcs</h2>
+                                    </div>
                                 </div>
-                                <div className='flex flex-col gap-y-4'>
-                                    <h3 className='text-gray-400 text-base'>Date</h3>
-                                    <h2 className='text-lg font-medium'>07 Jul</h2>
-                                </div>
-                                <div className='flex flex-col gap-y-4'>
-                                    <h3 className='text-gray-400 text-base'>Count</h3>
-                                    <h2 className='text-lg font-medium'>3 pcs</h2>
+                                <div className='flex flex-col gap-y-6 mt-10'>
+                                    <div className='flex flex-col gap-y-2'>
+                                        <h3 className='text-gray-400 text-base'>Category</h3>
+                                        <h2 className='text-lg font-medium'>PG-13</h2>
+                                    </div>
+                                    <div className='flex flex-col gap-y-2'>
+                                        <h3 className='text-gray-400 text-base'>Time</h3>
+                                        <h2 className='text-lg font-medium'>{dataBooking.time}</h2>
+                                    </div>
+                                    <div className='flex flex-col gap-y-2'>
+                                        <h3 className='text-gray-400 text-base'>Seats</h3>
+                                        <h2 className='text-lg font-medium'>{dataCheckout.toString()}</h2>
+                                    </div>
                                 </div>
                             </div>
-                            <div>
-                                <div className='flex flex-col gap-y-4'>
-                                    <h3 className='text-gray-400 text-base'>Category</h3>
-                                    <h2 className='text-lg font-medium'>PG-13</h2>
-                                </div>
-                                <div className='flex flex-col gap-y-4'>
-                                    <h3 className='text-gray-400 text-base'>Time</h3>
-                                    <h2 className='text-lg font-medium'>2:00pm</h2>
-                                </div>
-                                <div className='flex flex-col gap-y-4'>
-                                    <h3 className='text-gray-400 text-base'>Seats</h3>
-                                    <h2 className='text-lg font-medium'>C4, C5, C6</h2>
-                                </div>
+                            <div className='flex justify-around w-11/12 h-12 border border-gray-400 relative bottom-5 mt-24 mx-auto items-center rounded'>
+                                <h2>Total</h2>
+                                <h2>${dataCheckout.length*10}.00</h2>
                             </div>
                         </div>
-                        <div className='flex relative top-72 justify-around w-11/12 h-12 border border-gray-400 mx-auto items-center rounded'>
-                            <h2>Total</h2>
-                            <h2>$30.00</h2>
-                        </div>
-                        <div className='relative top-96 flex flex-col gap-y-4'>
-                        <Link className="h-16 object-bottom w-full bg-white mx-auto items-center flex justify-center text-primary rounded-lg hover:bg-primary hover:text-white border">Download</Link>
-                            <Link lassName="h-16 object-bottom w-full bg-primary mx-auto items-center flex justify-center text-white rounded-lg hover:bg-white hover:text-primary border">Done</Link>
+                        <div className='relative flex flex-col gap-y-4 mt-8 w-96 mx-auto mb-10'>
+                            <Link className="h-16 w-full bg-white mx-auto items-center flex justify-center text-primary rounded-lg hover:bg-primary hover:text-white border">Download</Link>
+                            <Link to='/' onClick={changemovie}className ="h-16 object-bottom w-full bg-primary mx-auto items-center flex justify-center text-white rounded-lg hover:bg-white hover:text-primary border">Done</Link>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        {/* <div className='bg-gray-100'>
+            <div className="mx-auto">
+            <div className="absolute px-5 z-10 inset-y-0 left-44 top-1/2 flex flex-col gap-y-10 bg-[url('../../assets/tickitz 1.png')]">
+                <h2 className='text-white text-7xl font-bold'>Thankyou For Purchasing</h2>
+                <h3 className='text-gray-400 text-3xl'>Lorem ipsum dolor sit amet consectetur. <br />Quam pretium pretium tempor integer sed magna et.</h3>
+                <h3 className='flex items-center gap-x-4 text-white text-2xl'>Please Download Your Ticket<BsArrowRight /></h3>
+            </div>
+                <div className='flex justify-between px-5'>
+                    <img className='w-2/3' src={backg} alt="" />
+                    <div className=' inset-y-0 right-32 h-1/2 bottom-0 my-auto bg-white w-96 rounded-lg ml-92'>
+                        <img className='mx-auto  top-16' src={qr} alt="" />
+                        <hr className=' top-32' />
+                        <div className=' flex justify-around top-40'>
+                            <div className='flex flex-col gap-y-6'>
+                                <div className='flex flex-col gap-y-2'>
+                                    <h3 className='text-gray-400 text-base'>Movie</h3>
+                                    <h2 className='text-lg font-medium'>{(dataBooking.title_movie).slice(0,8)} ..</h2>
+                                </div>
+                                <div className='flex flex-col gap-y-2'>
+                                    <h3 className='text-gray-400 text-base'>Date</h3>
+                                    <h2 className='text-lg font-medium'>{(dataBooking.time_playing).slice(0,8)} ..</h2>
+                                </div>
+                                <div className='flex flex-col gap-y-2'>
+                                    <h3 className='text-gray-400 text-base'>Count</h3>
+                                    <h2 className='text-lg font-medium'>{dataCheckout.length} pcs</h2>
+                                </div>
+                            </div>
+                            <div className='flex flex-col gap-y-6'>
+                                <div className='flex flex-col gap-y-2'>
+                                    <h3 className='text-gray-400 text-base'>Category</h3>
+                                    <h2 className='text-lg font-medium'>PG-13</h2>
+                                </div>
+                                <div className='flex flex-col gap-y-2'>
+                                    <h3 className='text-gray-400 text-base'>Time</h3>
+                                    <h2 className='text-lg font-medium'>{dataBooking.time}</h2>
+                                </div>
+                                <div className='flex flex-col gap-y-2'>
+                                    <h3 className='text-gray-400 text-base'>Seats</h3>
+                                    <h2 className='text-lg font-medium'>{dataCheckout.toString()}</h2>
+                                </div>
+                            </div>
+                        </div>
+                        <div className='flex  top-72 justify-around w-11/12 h-12 border border-gray-400 mx-auto items-center rounded'>
+                            <h2>Total</h2>
+                            <h2>${dataCheckout.length*10}.00</h2>
+                        </div>
+                        <div className=' top-96 flex flex-col gap-y-4'>
+                            <Link className="h-16 object-bottom w-full bg-white mx-auto items-center flex justify-center text-primary rounded-lg hover:bg-primary hover:text-white border">Download</Link>
+                            <Link to='/' onClick={changemovie}className ="h-16 object-bottom w-full bg-primary mx-auto items-center flex justify-center text-white rounded-lg hover:bg-white hover:text-primary border">Done</Link>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> */}
         <Footer />
     </>
   )
 }
 
-export default check_payment
+export default Check_payment

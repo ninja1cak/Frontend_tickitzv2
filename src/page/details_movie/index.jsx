@@ -127,11 +127,13 @@ function Details_movie() {
       const check = (v) =>{
         console.log({
             ...schedule[v.currentTarget.value],
-            time_playing: filterdate
+            time_playing: filterdate,
+            image_movie: movie.url_image_movie
         })
         setDatas({
             ...schedule[v.currentTarget.value],
-            time_playing: filterdate
+            time_playing: filterdate,
+            image_movie: movie.url_image_movie
         })
         cekIsi(v.target.value)
       }
@@ -226,7 +228,7 @@ function Details_movie() {
                 </div>
                 </div>
                 <div className=''>
-                    <h2 className='mt-20 text-lg font-bold'>Synopsis</h2>
+                    <h2 className='md:mt-20 mt-36 text-lg font-bold'>Synopsis</h2>
                     <p className='w-3/4 leading-loose'>
                     {movie?movie.synopsis_movie:"data not found"}
                     </p>
@@ -234,10 +236,10 @@ function Details_movie() {
             </section>
             <section className=''>
                 <h2 className='mt-16 text-2xl font-bold'>Book Tickets</h2>
-                <div className='flex justify-between mx-auto items-center mt-10'>
-                    <div className="flex flex-col gap-y-4 w-1/4">
-                        <h3>Choose Date</h3>
-                        <select onChange={filterDate} className="select select-bordered w-full h-12 max-w-xs bg-gray-100">
+                <div className='flex md:flex-row flex-col gap-y-8 justify-between mx-auto items-center px-2 mt-10'>
+                    <div className="flex flex-col gap-y-2 md:w-1/4 w-full">
+                        <h3 className='mx-auto'>Choose Date</h3>
+                        <select onChange={filterDate} className="select select-bordered mx-auto w-full h-12 max-w-xs bg-gray-100">
                             {
                                 date != null ? date.map((v) => {
                                     return <option>{v}</option>
@@ -247,9 +249,9 @@ function Details_movie() {
                             }  
                         </select>
                     </div>
-                    <div className="flex flex flex-col gap-y-4 w-1/4">
-                        <h3>Choose  Time</h3>
-                        <select onChange={filterTimefunc} className="select select-bordered w-full h-12 max-w-xs bg-gray-100">
+                    <div className="flex flex flex-col gap-y-2 md:w-1/4 w-full">
+                        <h3 className='mx-auto'>Choose  Time</h3>
+                        <select onChange={filterTimefunc} className="select select-bordered mx-auto w-full h-12 max-w-xs bg-gray-100">
                             <option>All</option>
                         {
                                 times != null ? times.map((data) => {
@@ -260,9 +262,9 @@ function Details_movie() {
                             }  
                         </select>
                     </div>
-                    <div className="flex flex flex-col gap-y-4 w-1/4">
-                        <h3>Choose  Location</h3>
-                        <select onChange={filterLocation} className="select select-bordered w-full h-12 max-w-xs bg-gray-100">
+                    <div className="flex flex flex-col gap-y-2 md:w-1/4 w-full ">
+                        <h3 className='mx-auto'>Choose  Location</h3>
+                        <select onChange={filterLocation} className="select select-bordered mx-auto w-full h-12 max-w-xs bg-gray-100">
                             <option>All</option>
                             {
                                 city != null ? city.map((data) => {
@@ -283,13 +285,13 @@ function Details_movie() {
             <section className='relative flex flex-col gap-y-10 mt-10'>
                 <div className='flex gap-x-10'>
                     <h2 className='text-lg font-bold'>Choose Cinema </h2>
-                    <h3 className='text-md text-gray-600'>39 Result</h3>
+                    <h3 className='text-md text-gray-600'>{meta.total} Result</h3>
                 </div>
                 <div>
-                    <div className='flex justify-between'>
+                    <div className='flex sm:flex-row flex-col gap-y-4 justify-between sm:mx-4 items-center'>
                             {
                                 schedule != null ? schedule.map((data, index) => {
-                                    return <button onClick={check} className='group border w-72 h-40 bg-white focus:outline-none focus:ring focus:ring-primary rounded-lg' value={index + 3*(page-1)}><img className='w-44 m-auto h-auto' src={data.cinema_logo_url} alt="" /></button>
+                                    return <button onClick={check} className='group mx-auto border w-72 h-40 mx-2 bg-white focus:outline-none focus:ring focus:ring-primary rounded-lg' value={index + 3*(page-1)}><img className='w-44 px-2 m-auto h-auto' src={data.cinema_logo_url} alt="" /></button>
                                 }) 
                                 :
                                 <p>Data not found</p>
