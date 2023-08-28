@@ -250,7 +250,6 @@ function Profile() {
                     className="object-cover mx-auto rounded-full h-36 w-36 cursor-pointer"
                     src={ image ? URL.createObjectURL(image) : (user.url_photo_user == null ? PP : user.url_photo_user ) }
                     />
-                    <p className="font-medium text-lg mt-4 mb-2">test_satu</p>
                     <p className="font-medium text-lg mt-4 mb-2">{`${user.first_name} ${user.last_name}`}</p>
                     <p className="text-sm text-gray-600 ">Moviegoers</p>
                 </div>
