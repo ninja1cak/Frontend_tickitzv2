@@ -8,6 +8,8 @@ import { useSelector } from 'react-redux/es/hooks/useSelector'
 import { useDispatch } from 'react-redux'
 import { addData, logout } from '../store/reducer/user'
 import useApi from '../helper/useApi'
+import PP from '../assets/dummy-user-removebg-preview.png'
+
 
 
 function Header() {
@@ -77,7 +79,7 @@ function Header() {
               ):(
                 <img
                 className="object-cover w-5 h-auto"
-                src={data.data[0].url_photo_user}
+                src={PP}
                 alt=""
                 />
               )}           
