@@ -49,7 +49,10 @@ const goLogin = async () =>{
         }
     } catch (error) {
         console.log(error)
-        setStatus(error.response.data.status)
+        if(error.response.data.description != "wrong password"){
+            setStatus(error.response.data.status)
+
+        }
         setError(error.response.data.description)
     }
 }
@@ -72,8 +75,11 @@ useEffect(() =>{
     }else{
         setBtnState(false)
     }
+    if(status != 0) {
+        setStatus(0)
+    }
     console.log(form)
-},[form,error])
+},[form,error,status])
 
   return (
     <>

@@ -97,7 +97,7 @@ useEffect(() =>{
                 <div className='w-1/3 md:w-3/5 mb-8'>
                     <img src={logo} alt="logo" />
                 </div>
-                <div className='w-full h-2/3 bg-white rounded-md md:rounded-2xl'>
+                <div className='w-full h-[600px] bg-white rounded-md md:rounded-2xl'>
                     <div className='flex flex-col px-10 md:px-24'>
                         <div className='hidden md:flex justify-center gap-5 mt-8'>
                             <div className='flex flex-col justify-center items-center'>
@@ -184,7 +184,7 @@ useEffect(() =>{
                             <span className='text-slate-600 font-medium'>Already have an account?</span>
                             <Link className='ms-2 text-blue-500 font-medium underline underline-offset-4' to="/Login">Log in</Link>
                         </div>
-                        <div className='hidden md:flex items-center gap-3 mb-10 md:mb-6'>
+                        <div className='flex items-center gap-3 mb-10 md:mb-6'>
                             <input type="checkbox" required onClick={handleCheckbox} name='checkbox'/>
                             <span>I agree to terms & conditions</span>
                         </div>
