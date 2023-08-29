@@ -190,7 +190,7 @@ function Payment_page() {
                         </dialog>
                         {/* <Link  to='/payment_info'>Pay Your Order</Link> */}
                     </div>
-                    {(!payment ? <button className="btn text-lg font-bold border w-full h-16 mt-6 bg-white mx-auto items-center flex justify-center text-gray-600 rounded-md">Select Payment Method</button>:<button className="btn text-lg font-bold border w-full h-16 mt-6 bg-primary mx-auto items-center flex justify-center text-white rounded-md hover:bg-white hover:text-primary" onClick={()=>window.my_modal_1.showModal()}>Pay Your Order</button>)}
+                    {(!payment ? <button className="btn text-lg font-bold border w-full h-16 mt-6 bg-white mx-auto items-center flex justify-center text-gray-400 rounded-md">Select Payment Method</button>:<button className="btn text-lg font-bold border w-full h-16 mt-6 bg-primary mx-auto items-center flex justify-center text-white rounded-md hover:bg-white hover:text-primary" onClick={()=>window.my_modal_1.showModal()}>Pay Your Order</button>)}
                 </div>
             </div>
                 </div>

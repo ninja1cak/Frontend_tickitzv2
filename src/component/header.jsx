@@ -11,7 +11,7 @@ import useApi from '../helper/useApi'
 
 
 function Header() {
-  const {data,isAuth} = useSelector((s)=>s.users)
+  const {data, isAuth} = useSelector((s)=>s.users)
   const dispatch = useDispatch()
   const api = useApi()
   const [user, setUser] = useState({})
@@ -77,7 +77,7 @@ function Header() {
               ):(
                 <img
                 className="object-cover w-5 h-auto"
-                src={avatar}
+                src={data.data[0].url_photo_user}
                 alt=""
                 />
               )}           
