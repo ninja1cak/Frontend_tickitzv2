@@ -14,6 +14,7 @@ function Admin_Movie_update(){
     const [pictureURI, setPictureURI] = React.useState('')
     const [pictureErr, setPictureErr] = React.useState(true)
     const [movie, setMovie] = useState({})
+    const [status, setStatus] = useState()
     const {data} = useSelector((s) => s.users)
     const navigate = useNavigate()
     const params = useParams()
@@ -35,23 +36,25 @@ function Admin_Movie_update(){
 
       const updateMovie = async(values, {resetForm}) => {
         try {
+            let count = 0 
             if (!selectedPicture) {
                 setPictureErr(false)
             } else {
                 setPictureErr(true)
+                count++
             }
-      
+            window.my_modal_1.showModal()
+
             const form = new FormData()
             console.log('tes')
             Object.keys(values).forEach((key) => {
               console.log(key, ": ", values[key])
               if (values[key]) {
-                  if (key === 'release_date_movie') {
+                    count++
+                    if (key === 'release_date_movie') {
                       const dateValue = new Date(values[key]);
                       
-                      // Format the date as 'YYYY-MM-DD'
                       const formattedDate = `${dateValue.getFullYear()}-${(dateValue.getMonth() + 1).toString().padStart(2, '0')}-${dateValue.getDate().toString().padStart(2, '0')}T00:00:00Z`;
-                    //   console.log(formattedDate)
                       console.log('if 1 : ', key, ':', formattedDate)
                       form.append(key, formattedDate);
                   }else if (key ==='genre'){
@@ -70,7 +73,13 @@ function Admin_Movie_update(){
       
               }
           })
-      
+            console.log('count', count)
+
+            if(count === 0 ){
+                setStatus(420)
+                return
+            }
+     
             if (selectedPicture) {
               form.append('file', selectedPicture)
             }
@@ -82,8 +91,9 @@ function Admin_Movie_update(){
               },
             })
             console.log(data)
+            setStatus(200)
             setSelectedPicture(false)
-            window.location.reload();
+            // window.location.reload();
       
         } catch (error) {
             console.log(error)
@@ -130,7 +140,7 @@ function Admin_Movie_update(){
         <>
         <Header />
         <div className="bg-gray-200 w-full h-full flex flex-col items-center">
-            <div className="w-7/12 bg-white p-10 my-5 rounded-lg">
+            <div className="w-[95%] md:w-7/12 bg-white p-10 my-5 rounded-lg">
                 <h1 className="font-bold text-lg">Add Update Movie</h1>
                 <div>
                 <Formik
@@ -148,7 +158,7 @@ function Admin_Movie_update(){
                   handleChange, handleBlur, handleSubmit,errors, touched, values
                 })=> (
                         <form onSubmit={handleSubmit}>
-                        <div className="flex flex-col gap-2 my-5 w-2/12">
+                        <div className="flex flex-col gap-2 my-5 w-[200px]">
                             <div className="border-2 rounded-lg mb-4">
                                 {!selectedPicture && (
                                 <div className="h-52 flex items-center justify-center">
@@ -183,7 +193,7 @@ function Admin_Movie_update(){
                             onChange={handleChange}
                             onBlur={handleBlur} />
                         </div>
-                        <div className="flex justify-between gap-5">
+                        <div className="flex flex-col lg:flex-row justify-between gap-5">
                             <div className="flex flex-col gap-2 mt-3 w-full">
                                 <label>Release date</label>
                                 <input type="date" name="release_date_movie" 
@@ -246,6 +256,18 @@ function Admin_Movie_update(){
                 </div>
             </div>
         </div>
+        <dialog id="my_modal_1" className="modal">
+                <form method="dialog" className="modal-box">
+                    <h3 className="font-bold text-lg">Status</h3>
+                     {
+                       status === undefined ? <p>Please wait for updating data</p> : status == 420 ? <p>Enter One Of Input</p> : status == 200 ? <p>Update Movie Success</p> : <p> Update Movie Failed</p>
+
+                    }
+                    <div className="modal-action">
+                    <button className="btn" type='button' onClick={() => navigate(0)}>Close</button>
+                    </div>
+                </form>
+        </dialog>
         </>
     )
 }

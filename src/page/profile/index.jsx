@@ -95,6 +95,42 @@ function Profile() {
         }
     }
 
+    const updateUserDataRes = async (e) =>{  
+        try {
+            
+            e.preventDefault()
+            const formData = new FormData()
+            console.log('first_name', first_name)
+            formData.append('first_name', first_name)
+            formData.append('last_name', last_name)
+            formData.append('phone_number', `+62${phone_number}`)
+            formData.append('email_user', email_user)
+
+            if(password_user.password !== password_user.confirm) {
+                setStatus(400)
+                console.log("INPUT BERBEDA")
+            }
+            if(password_user.password == null || password_user.confirm == null) {
+                setStatus(400)
+                console.log("Tidak boleh kosong")
+            }
+
+            formData.append('password_user', password_user.password)
+
+            const {data} = await api.patch(`/user/`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+              })
+              console.log(data)
+              console.log(data.data[0].status)
+              setStatus(data.status)
+        } catch (error) {
+            console.log(error)
+            setStatus(404)
+        }
+    }
+
     const inputChange = (e) => {
         const data = { ...form }
         data[e.target.name] = e.target.value
@@ -157,6 +193,9 @@ function Profile() {
             setBtnStatePass(true)
         }else{
             setBtnStatePass(false)
+        }
+        if(status === 201) {
+            navigate(0)
         }
     }, [status, password_user, first_name, last_name, email_user, phone_number])
 
@@ -242,7 +281,7 @@ function Profile() {
                 </div>
                 </div>
             </section>
-            <section className="block mx-auto max-w-2xl lg:hidden">
+            <section className="block mx-8 md-mx-auto max-w-2xl lg:hidden">
                 <div className="block bg-white mx-3 p-6 rounded-t-lg ">
                 <p>INFO</p>
                 <div className="flex flex-col items-center mt-6 tracking-wider">
@@ -256,12 +295,145 @@ function Profile() {
 
                 </div>
                 <div className="block border-t mx-3 border-gray-300 bg-white py-6 rounded-b-lg">
-                <button className="block bg-primary h-11 w-40 text-white tracking-wider text-sm mx-auto rounded-lg">
-                    Logout
-                </button>
+                    <div className='block md:hidden px-10 pt-4'>
+                        <span className='font-medium text-slate-500'>Loyalty Points</span>
+                        <div className='relative my-6'>
+                            <img className='h-32 rounded-xl' src={Points_Banner} alt="point_banner" />
+                            <div className='absolute top-0 flex flex-col px-6 pt-5'>
+                                <span className='text-white font-bold text-xl'>Movigoers</span>
+                                <div className='pt-8'>
+                                    <span className='text-white text-2xl font-medium'>320</span>
+                                    <span className='pl-2 text-white'>points</span>
+                                </div>
+                            </div>
+                        </div>
+                        <span className='text-lg text-slate-500'>180 points become a master</span>
+                        <input type="range" min={0} max="100" value="50" className="range range-sm range-primary" disabled/> 
+                    </div>
+                    <div className='w-full flex justify-center py-6 px-6'>
+                        <button className='btn btn-outline btn-ghost text-blue-700 w-full capitalize' onClick={()=>window.mobile_edit_profile.showModal()}>Edit Profile</button>
+                        <dialog id="mobile_edit_profile" className="modal">
+                        <form method="dialog" className="modal-box">
+                            <div className='modal-action'>
+                                <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" onClick={()=>console.log('Tess')}>✕</button>
+                            </div>
+                            {
+                                status === 201 ?
+
+                                <p>
+                                    Update Success!!
+                                </p> 
+                            : 
+                                <div className="mx-3 mt-8 lg:mx-0">
+                                    <p className="text-lg font-medium text-gray-800 pl-6 mb-8 lg:hidden">
+                                        Account Settings
+                                    </p>
+                            <div className="bg-white p-6 rounded-lg">
+                                <p className="border-b mb-10 border-gray-300 pb-2 text-lg">
+                                Details Information
+                                </p>
+                                <form className="tracking-wider lg:flex lg:flex-wrap lg:gap-x-10 " method='POST' encType="multipart/form-data" >
+                                <div className="mb-6 lg:w-[100%] lg:max-w-[250px] xl:w-[100%] xl:max-w-[350px]">
+                                    <label className="block mb-3 lg:block ">First Name</label>
+                                    
+                                    <input
+                                    className="pl-6 block border border-gray-300 w-full h-10 rounded-lg  bg-gray-50"
+                                    type="text"
+                                    placeholder={user.first_name}
+                                    onChange={(e) => setFirstName(e.target.value) }
+                                    />
+                                    {/* {e => setFirstName(e.target.value)} */}
+                                </div>
+                                <div className="block mb-6 lg:mb-0 lg:block lg:w-[100%] lg:max-w-[250px] xl:w-[100%] xl:max-w-[350px]">
+                                    <label className="block mb-3 ">Last Name</label>
+                                    <input
+                                    className="pl-6 block border border-gray-300 w-full h-10 rounded-lg bg-gray-50 "
+                                    type="text"
+                                    placeholder={user.last_name}
+                                    name='last_name'
+                                    onChange={(e) => setLastName(e.target.value) }
+            // {e => setLastName(e.target.value)}
+                                    />
+                                </div>
+                                <div className="mb-6 lg:w-[100%] lg:max-w-[250px] xl:w-[100%] xl:max-w-[350px]">
+                                    <label className="block mb-3">E-mail</label>
+                                    
+                                    <input
+                                    className="pl-6 block border border-gray-300 w-full h-10 rounded-lg bg-gray-50"
+                                    type="text"
+                                    placeholder={user.email_user}
+                                    onChange={(e) => setEmailUser(e.target.value)}
+                                    // {e => setEmail(e.target.value)}
+                                    />
+                                </div>
+                                <div className="mb-6  xl:w-[100%] xl:max-w-[350px]">
+                                    <label className="block mb-3">Phone Number</label>
+                                    <div className=" bg-gray-50 flex items-center border border-gray-300 rounded-lg lg:w-[100%] lg:max-w-[250px] xl:w-[100%] xl:max-w-[350px]">
+                                    <button className="px-4 font-sans tracking-wider text-black">
+                                        +62
+                                    </button>
+                                    <div className="border-r h-8" />
+                                
+                                    <input
+                                        type="number"
+                                        className="h-11 pl-5 w-full lg:w-[100%] lg:max-w-[300px] rounded-lg bg-gray-50"
+                                        placeholder={user.phone_number ? user.phone_number.slice(3):'update your phone number' }
+                                        value={form.phone_number}
+                                        onChange={(e) => setPhoneNumber(e.target.value)}
+                                        // {e => setPhoneNumber(e.target.value)}
+                                    />
+                                    </div>
+                                </div>
+                                <div className="relative mb-6 lg:w-[100%] lg:max-w-[250px] xl:w-[100%] xl:max-w-[350px]">
+                        <label className="block mb-3">New Password</label>
+                        <input
+                        className="px-6 block border border-gray-300 w-full h-10 rounded-lg bg-gray-50"
+                        type= {toggle == false ? 'password' : 'text'}
+                        placeholder='Write your password'
+                        onChange={e => setPasswordUser({...password_user,password : e.target.value})}
+                        required 
+                        />
+                        {
+                            (toggle === false) ? <img className='cursor-pointer absolute top-12 right-4 w-6 text-slate-500' src={eyeClosed} alt="eye-closed" onClick={handleToggle}/>
+                            : <img className='cursor-pointer absolute top-12 right-4 w-5 text-slate-500' src={eyeOpen} alt="eye-closed" onClick={handleToggle}/>
+                        }
+                        {
+                            !password_user.password ? '' : password_user.password.length <6  ? <p className=' absolute text-red-700 font-medium text-sm'>Minimum password 6</p> : ''
+                        }
+                    </div>
+                    <div className="relative mb-6 lg:w-[100%] lg:max-w-[250px] xl:w-[100%] xl:max-w-[350px]">
+                        <label className="block mb-3">Confirm</label>
+                        
+                        <input
+                        className="px-6 relative border border-gray-300 w-full h-10 rounded-lg bg-gray-50"
+                        type= {toggle == false ? 'password' : 'text'}
+                        placeholder="Confirm your password"
+                        onChange={e => setPasswordUser({...password_user, confirm : e.target.value})}
+                        required
+                        />
+                        {
+                            !password_user.confirm ? '' : password_user.confirm !== password_user.password ? <p className=' absolute text-red-700 font-medium text-sm'> Password not same, input again</p> : ''
+                        }
+                        {
+                            (toggle === false) ? <img className='cursor-pointer absolute top-12 right-4 w-6 text-slate-500' src={eyeClosed} alt="eye-closed" onClick={handleToggle}/>
+                            : <img className='cursor-pointer absolute top-12 right-4 w-5 text-slate-500' src={eyeOpen} alt="eye-closed" onClick={handleToggle}/>
+                        }
+                    </div>
+                                </form>
+                            </div>
+
+                            </div>
+                            }
+                            <button  className="block btn mx-auto lg:mx-0 bg-primary text-white w-[80%] max-w-xl lg:max-w-xs p-2 my-10 rounded-lg wider hover:opacity-50 active:opacity-100 active:bg-gray-100 active:text-primary border active:border-primary" disabled={btnState} onClick={updateUserDataRes}>
+                                Update changes
+                            </button>
+                        </form>
+                        </dialog>
+                    </div>
                 </div>
+                
             </section>
-            <section className="block mx-auto max-w-2xl lg:mx-0 lg:max-w-none">
+            <section className="hidden md:block mx-auto max-w-2xl lg:mx-0 lg:max-w-none">
                 <div className="mx-3 mt-8 lg:mx-0">
                 <p className="text-lg font-medium text-gray-800 mb-8 lg:hidden">
                     Account Settings
@@ -272,7 +444,6 @@ function Profile() {
                     </p>
                     <form className="tracking-wider lg:flex lg:flex-wrap lg:gap-x-10 " method='POST' encType="multipart/form-data" >
                     <div className="mb-6 lg:w-[100%] lg:max-w-[250px] xl:w-[100%] xl:max-w-[350px]">
-                        <label className="block mb-3 lg:hidden">Full Name</label>
                         <label className="block mb-3 lg:block ">First Name</label>
                         
                         <input
@@ -344,8 +515,9 @@ function Profile() {
                     </div>
                 </form>
                 </dialog>
+                
             </section>
-            <section className="block mx-auto max-w-2xl lg:mx-0 lg:max-w-none ">
+            <section className="hidden md:block mx-auto max-w-2xl lg:mx-0 lg:max-w-none ">
                 <div className="mx-3 mt-8 lg:mx-0">
                 <div className="bg-white p-6 rounded-lg ">
                     <p className="border-b mb-10 border-gray-300 pb-2 text-lg">
@@ -405,9 +577,12 @@ function Profile() {
                 </form>
                 </dialog>
                 </div>
+                
             </section>
             </div>
+            
         </div>
+        
     </main>
     <dialog id="my_modal_3" className="modal">
         <form method="dialog" className="modal-box">
@@ -422,7 +597,9 @@ function Profile() {
         </div>
     </form>
     </dialog>
-    <Footer />
+    <div className='hidden md:block'>
+        <Footer />
+    </div>
     
     </>
   )

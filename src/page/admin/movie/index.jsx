@@ -49,7 +49,7 @@ function Admin_Movie() {
     
     const handleDateChange = (date) => {
         setSelectedDate(date);
-        setPage(1); // Reset page to 1 when changing date
+        setPage(1); 
     };
         
     const handleDelete = async (id_movie) => {
@@ -90,7 +90,7 @@ function Admin_Movie() {
         <>
         <Header />
         {/* Dashboard Admin Movie Start */}
-        <div className="bg-gray-200 w-full h-full flex flex-col items-center">
+        <div className="bg-gray-100 w-full h-full flex flex-col items-center">
             {/* Container Movie Start */}
             <div className="w-10/12 bg-white p-10 my-5 rounded-lg">
                 {/* Header Container Start (Mobile) */}
@@ -183,7 +183,7 @@ function Admin_Movie() {
                                         <td>{v.duration_movie}</td>
                                         <th>
                                             <div className="flex gap-1">
-                                                <button className="btn bg-[#1D4ED8] btn-sm">
+                                                <button onClick={() => navigate(`/buy_ticket/${v.id_movie}`)} className="btn bg-[#1D4ED8] btn-sm">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
                                                         <g clip-path="url(#clip0_114_10497)">
                                                         <path d="M9 3.375C5.25 3.375 2.0475 5.7075 0.75 9C2.0475 12.2925 5.25 14.625 9 14.625C12.7537 14.625 15.9525 12.2925 17.25 9C15.9525 5.7075 12.7537 3.375 9 3.375ZM9 12.75C6.93 12.75 5.25 11.07 5.25 9C5.25 6.93 6.93 5.25 9 5.25C11.07 5.25 12.75 6.93 12.75 9C12.75 11.07 11.07 12.75 9 12.75ZM9 6.75C7.75875 6.75 6.75 7.75875 6.75 9C6.75 10.2413 7.75875 11.25 9 11.25C10.2413 11.25 11.25 10.2413 11.25 9C11.25 7.75875 10.2413 6.75 9 6.75Z" fill="white"/>
@@ -272,10 +272,6 @@ function Admin_Movie() {
                             Math.ceil((meta.total/3)) == page || Math.ceil((meta.total/12)) == 0 ? <button disabled className="btn btn-sm btn-outline btn-primary border border-white w-24 bg-white shadow-lg">Next</button> : <button onClick={() => setPage(meta.next)} className="btn btn-sm text-primary hover:bg-primary hover:text-white  border-white w-24 bg-white shadow-lg">Next</button>
                         }
                     </div>
-                        {/* <div className='btn w-12 h-10 rounded-full font-bold text-slate-400'>1</div>
-                        <div className='btn w-12 h-10 rounded-full font-bold text-slate-400'>2</div>
-                        <div className='btn w-12 h-10 rounded-full font-bold text-slate-400'>3</div>
-                        <div className='btn w-12 h-10 rounded-full font-bold text-slate-400'>4</div> */}
                 </div>
             </div>
             {/* Pagination End */}

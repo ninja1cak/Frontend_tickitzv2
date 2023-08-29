@@ -20,7 +20,7 @@ function Admin_Movie_create(){
     const [genre, setGenre] = useState([])
     const [city, setCity] = useState([])
     const [cinema, setCinema] = useState([])
-
+    const [status, setStatus] = useState()
     const {data} = useSelector((s) => s.users)
     const navigate = useNavigate()
 
@@ -94,19 +94,20 @@ function Admin_Movie_create(){
 
     const createMovie = async(values, {resetForm}) => {
         try {
-            console.log('tes', cinema)
 
+            let next = true
             if (!selectedPicture) {
                 setPictureErr(false)
                 return
             } else {
                 setPictureErr(true)
             }
+            window.my_modal_1.showModal()
       
             const form = new FormData()
             Object.keys(values).forEach((key) => {
               console.log(key, ": ", values[key])
-              if (values[key]) {
+              if (values[key] !='') {
                   if (key === 'release_date_movie' || key ==='date_start' || key ==='date_end') {
                       const dateValue = new Date(values[key]);
                       
@@ -129,9 +130,16 @@ function Admin_Movie_create(){
                   }
       
       
+              }else{
+                next = false
+                
               }
           })
-
+          
+         if(!next){
+            setStatus(420)
+            return
+          }
           for(let i = 0 ; i<genre.length; i++){
              form.append('genre', genre[i])
           }
@@ -143,10 +151,10 @@ function Admin_Movie_create(){
          for(let i = 0 ; i<cinema.length; i++){
             form.append('cinema_name', cinema[i])
          }
-      
-            if (selectedPicture) {
-              form.append('file', selectedPicture)
-            }
+    
+        if (selectedPicture) {
+            form.append('file', selectedPicture)
+        }
       
       
             const {data} = await api.post('/movie/', form, {
@@ -155,11 +163,15 @@ function Admin_Movie_create(){
               },
             })
             console.log(data)
+            setStatus(200)
             setSelectedPicture(false)
+            
           //   resetForm()
       
         } catch (error) {
             console.log(error)
+            console.log(error.response.status)
+            setStatus(error.response.status)
         }
         
     }
@@ -193,7 +205,7 @@ function Admin_Movie_create(){
         <>
         <Header />
         <div className="bg-gray-200 w-full h-full flex flex-col items-center">
-            <div className="w-7/12 bg-white p-10 my-5 rounded-lg">
+            <div className=" w-[95%] md:w-7/12 lg:w-[100%] max-w-3xl bg-white p-10 my-5 rounded-lg">
                 <h1 className="font-bold text-lg">Add New Movie</h1>
                 <div>
                     <Formik
@@ -202,15 +214,11 @@ function Admin_Movie_create(){
                         director_movie: '',
                         duration_movie: '',
                         casts_movie: '',
-                        genre: '',
                         synopsis_movie: '',
                         release_date_movie: '',
-                        url_image_movie: '',
-                        city:'',
                         date_start: '',
                         date_end: '',
                         price_seat: 0,
-                        cinema_name: '',
                         time: ''
                     }} onSubmit={createMovie}>
                 {({
@@ -242,7 +250,7 @@ function Admin_Movie_create(){
                         <div className="flex flex-col gap-2">
                             <label>Movie Name</label>
                             <input type="text" name="title_movie" 
-                            className="border-2 rounded p-5 border-gray-200"                               
+                            className="border-2 rounded border-gray-200"                               
                             value={values.title_movie}
                             onChange={handleChange}
                             onBlur={handleBlur} />
@@ -250,14 +258,14 @@ function Admin_Movie_create(){
 
                         <div className="flex flex-col gap-2 mt-3">
                             <label>Category</label>
-                            <CreatableSelect onChange={handleChangeGenre} isMulti options={optionGenre}></CreatableSelect>
+                            <CreatableSelect  onChange={handleChangeGenre} isMulti options={optionGenre}></CreatableSelect>
                         </div>
                         
-                        <div className="flex justify-between gap-5">
+                        <div className="flex flex-col lg:flex-row justify-between gap-5">
                             <div className="flex flex-col gap-2 mt-3 w-full">
                                 <label>Release date</label>
                                 <input type="date" name="release_date_movie" 
-                                className="border-2 rounded p-5 border-gray-200"                               
+                                className="border-2 rounded  border-gray-200"                               
                                 value={values.release_date_movie}
                                 onChange={handleChange}
                                 onBlur={handleBlur} />
@@ -265,7 +273,7 @@ function Admin_Movie_create(){
                             <div className="flex flex-col gap-2 mt-3">
                                 <label>Duration (hour / minute)</label>
                                     <input type="text" name="duration_movie" 
-                                    className="border-2 rounded p-5 border-gray-200"                               
+                                    className="border-2 rounded  border-gray-200"                               
                                     value={values.duration_movie}
                                     onChange={handleChange}
                                     onBlur={handleBlur} />
@@ -274,7 +282,7 @@ function Admin_Movie_create(){
                         <div className="flex flex-col gap-2 mt-3">
                             <label>Director Name</label>
                             <input type="text" name="director_movie" 
-                            className="border-2 rounded p-5 border-gray-200"                               
+                            className="border-2 rounded  border-gray-200"                               
                             value={values.director_movie}
                             onChange={handleChange}
                             onBlur={handleBlur} />
@@ -282,7 +290,7 @@ function Admin_Movie_create(){
                         <div className="flex flex-col gap-2 mt-3">
                             <label>Casts</label>
                             <input type="text" name="casts_movie" 
-                            className="border-2 rounded p-5 border-gray-200"                               
+                            className="border-2 rounded border-gray-200"                               
                             value={values.casts_movie}
                             onChange={handleChange}
                             onBlur={handleBlur} />
@@ -315,7 +323,7 @@ function Admin_Movie_create(){
                             <label>Set Date & Time</label>
                             <div className="flex gap-3 items-center">
                                 <input type="date" name="date_start" 
-                                className="border-2 rounded p-5 border-gray-200"                               
+                                className="border-2 rounded  border-gray-200"                               
                                 value={values.date_start}
                                 onChange={handleChange}
                                 onBlur={handleBlur} />
@@ -323,7 +331,7 @@ function Admin_Movie_create(){
                                 <h2>to</h2>
 
                                 <input type="date" name="date_end" 
-                                className="border-2 rounded p-5 border-gray-200"                               
+                                className="border-2 rounded  border-gray-200"                               
                                 value={values.date_end}
                                 onChange={handleChange}
                                 onBlur={handleBlur} />
@@ -333,7 +341,7 @@ function Admin_Movie_create(){
                         <div className="flex flex-col gap-2 mt-3">
                             <label>Time</label>
                             <input type="text" name="time" 
-                            className="border-2 rounded p-5 border-gray-200"                               
+                            className="border-2 rounded  border-gray-200"                               
                             value={values.time}
                             onChange={handleChange}
                             onBlur={handleBlur} />
@@ -341,7 +349,7 @@ function Admin_Movie_create(){
                         <div className="flex flex-col gap-2 mt-3">
                             <label>Ticket Price</label>
                             <input type="number" name="price_seat" 
-                            className="border-2 rounded p-5 border-gray-200"                               
+                            className="border-2 rounded border-gray-200"                               
                             value={values.price_seat}
                             onChange={handleChange}
                             onBlur={handleBlur} />
@@ -357,6 +365,18 @@ function Admin_Movie_create(){
                 </div>
             </div>
         </div>
+        <dialog id="my_modal_1" className="modal">
+                <form method="dialog" className="modal-box">
+                    <h3 className="font-bold text-lg">Status</h3>
+                     {
+                       status === undefined ? <p>Please wait for creating data</p> : status == 420 ? <p>Enter All Input</p> : status == 200 ? <p>Create Movie Success</p> : <p> Create Movie Failed</p>
+
+                    }
+                    <div className="modal-action">
+                    <button className="btn" type='button' onClick={() => navigate(0)}>Close</button>
+                    </div>
+                </form>
+        </dialog>
         </>
     )
 }
