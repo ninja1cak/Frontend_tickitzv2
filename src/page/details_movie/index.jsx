@@ -71,7 +71,7 @@ function Details_movie() {
           setdates(getDates(new Date(data.data[0].date_start),new Date(data.data[0].date_end)))
 
           setMeta(data.meta)
-          
+          console.log(data.data)
         } catch (error) {
           console.log(error)
           setSchedule(null)

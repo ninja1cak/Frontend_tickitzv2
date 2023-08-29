@@ -21,7 +21,7 @@ function Order_history() {
 
     const fetchData = async () => {
         try {
-            const { data } = await api.get(`/booking?page=1&limit=5`);
+            const { data } = await api.get(`/booking?page=1&limit=999999`);
               setOrder(data.data)
           } catch (error) {
             console.log(error);
