@@ -89,7 +89,7 @@ function Cards_order ({ title_movie, time, seats, date, total, image }) {
                     <div className='w-full'>
                         <div className='flex flex-col items-center'>
                             <label className='text-xs'>Total</label>
-                            <h3 className='text-sm lg:text-lg font-bold'>Rp. {total}</h3>
+                            <h3 className='text-sm lg:text-lg font-bold'>${total}</h3>
                         </div>
                     </div>
                 </div>
