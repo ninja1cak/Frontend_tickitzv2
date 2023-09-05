@@ -1,5 +1,4 @@
 import React from 'react'
-import banner from '../assets/movie-banner1.png'
 import { useNavigate } from 'react-router'
 
 function Card({title, banner, genre, id_movie}) {

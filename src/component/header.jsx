@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import logo from '../assets/Vector.svg'
 import mglass from '../assets/bx_bx-search.jpg'
-import avatar from '../assets/Ellipse 11.svg'
 import burger from '../assets/gg_menu-right-alt.svg'
 import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux/es/hooks/useSelector'
